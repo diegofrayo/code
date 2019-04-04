@@ -2,7 +2,6 @@
 
 monorepo that contains some some own JavaScript packages and their docs
 
+<Enter>
 
-## Docs
-
-[Go to the docs](http://diegofrayo.dev/docs)
+[Go to the docs](https://diegofrayo-docs.netlify.com)
