@@ -1,0 +1,45 @@
+{
+  "name": "@diegofrayo/docs",
+  "version": "1.0.0",
+  "description": "This is a documentation for some own JavaScript packages",
+  "license": "MIT",
+  "private": true,
+  "homepage": "https://diegofrayo-docs.netlify.com",
+  "scripts": {
+    "lint": "eslint -c eslintrc.json 'src/**/*.{js,jsx}'",
+    "start": "docz dev",
+    "build": "docz build"
+  },
+  "bugs": {
+    "url": "https://github.com/diegofrayo/code/issues",
+    "email": "diegofrayo@gmail.com"
+  },
+  "author": {
+    "name": "Diego Rayo",
+    "email": "diegofrayo@gmail.com",
+    "url": "https://diegofrayo.netlify.com"
+  },
+  "repository": {
+    "url": "https://github.com/diegofrayo/code.git",
+    "type": "git"
+  },
+  "dependencies": {
+    "@diegofrayo/components": "1.0.0",
+    "@diegofrayo/form": "1.0.0",
+    "@diegofrayo/styles": "1.0.0",
+    "@diegofrayo/validator": "1.0.0",
+    "parse-prop-types": "^0.3.0",
+    "docz": "^0.13.7",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.4",
+    "showdown": "^1.9.0"
+  },
+  "devDependencies": {
+    "@diegofrayo/eslint-config": "1.0.0",
+    "docz-theme-default": "^0.13.7",
+    "eslint": "latest"
+  },
+  "engines": {
+    "node": ">=8.15.1"
+  }
+}

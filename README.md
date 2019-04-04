@@ -1,2 +1,8 @@
 # code
-Set of React components and some own libraries
+
+monorepo that contains some some own JavaScript packages and their docs
+
+
+## Docs
+
+[Go to the docs](http://diegofrayo.dev/docs)

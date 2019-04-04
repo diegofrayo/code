@@ -1,0 +1,8 @@
+{
+  "internal": true,
+  "main": "../dist/styled/components.js",
+  "module": "../dist/styled/components.umd.js",
+  "dependencies": {
+    "@diegofrayo/styles": "1.0.0"
+  }
+}

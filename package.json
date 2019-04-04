@@ -1,0 +1,12 @@
+{
+  "name": "@diegofrayo/code",
+  "version": "1.0.0",
+  "description": "monorepo that contains some some own JavaScript packages and their docs",
+  "license": "MIT",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  }
+}

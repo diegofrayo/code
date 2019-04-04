@@ -1,0 +1,196 @@
+---
+name: Overview
+route: /form
+menu: Form
+---
+
+import '../../config';
+import Form from '@diegofrayo/form';
+import { PropsTable, Markdown } from '../../components';
+import propsDescription from './propsDescription';
+import MD from './_index-md.js';
+
+
+
+# form
+
+## Description
+
+A React component to build and validate forms easily
+
+
+
+## Installation
+
+**Yarn**
+```
+yarn add @diegofrayo/form --save
+```
+
+**NPM**
+```
+npm install @diegofrayo/form --save
+```
+
+
+
+## Usage
+
+```
+import React, { Fragment } from 'react';
+import Form from '@diegofrayo/form';
+import config from './formConfig';
+
+<Form
+  config={config}
+  onSubmit={values => {
+    alert('onSubmit');
+    console.log(values);
+    return api.post('endpoint', values); // this have to return a promise
+  }}
+>
+  {({ values, errors, status, onInputChange, onSubmit }) => {
+    return (
+      <Fragment>
+        <input value={values.email} type="email" onChange={onInputChange} name="email" />
+        {errors.email && <p class="error">{errors.email}</p>}
+
+        <input value={values.password} type="password" onChange={onInputChange} name="password" />
+        {errors.password && <p class="error">{errors.password}</p>}
+
+        <button disabled={status !== Form.STATUS.VALID} type="submit" onClick={onSubmit}>
+          {status === Form.STATUS.LOADING ? 'loading...' : 'submit'}
+        </button>
+      </Fragment>
+    );
+  }}
+</Form>
+```
+
+
+
+## Props
+
+<PropsTable component={Form} propsDescription={propsDescription} />
+
+
+
+## Configuration
+
+Below, You could see the detailed description of some props
+
+
+
+### children
+
+Function that receives one object as parameter and must return a React component to render. The parameter has these properties:
+
+<Markdown md={MD.children} />
+
+
+### config
+
+This object contains the form's inputs config. Each key is the unique identifier of each input. Each input will have a config object and it must have next properties:
+
+<Markdown md={MD.config} />
+
+Let's see an example of this prop
+
+```
+import validator from '@diegofrayo/validator';
+
+const config = {
+  name: {
+    type: 'string',
+    required: true,
+    errorMessage: 'Please enter a valid name.',
+    handlers: {
+      isValid: value => {
+        return validator(value)
+          .string()
+          .notAllowEmpty()
+          .exec();
+      },
+      transformBeforeSubmit: (value, values) => {
+        return `${value} ${values['lastName']}`;
+      },
+    },
+  },
+  lastName: {
+    type: 'string',
+    required: true,
+    errorMessage: 'Please enter a valid last name.',
+    handlers: {
+      isValid: value => {
+        return validator(value)
+          .string()
+          .notAllowEmpty()
+          .exec();
+      },
+      transformBeforeSubmit: (value, values) => {
+        return '';
+      },
+    },
+  },
+  age: {
+    type: 'number',
+    required: true,
+    defaultValue: 5,
+    errorMessage: 'Please enter a valid number.',
+    handlers: {
+      isValid: value => {
+        return validator(value)
+          .number()
+          .min(5)
+          .max(10)
+          .exec();
+      },
+      transformBeforeSave: value => {
+        return Number(value);
+      },
+      transformBeforeSubmit: value => {
+        return `Your age is ${value}`;
+      },
+    },
+  },
+};
+```
+
+
+
+## Types
+
+### FORM STATUS
+
+Use these status via `Form.STATUS`
+
+```
+{
+  VALID: 1,
+  INVALID: 2,
+  LOADING: 3,
+}
+```
+
+
+### SUBMIT RESPONSE TYPES
+
+Use these types via `Form.SUBMIT_RESPONSE_TYPES`
+
+```
+{
+  SUCCESS: 0,
+  FAILURE: 1,
+}
+```
+
+
+### SUBMIT RESPONSE
+
+```
+{
+  type: Form.SUBMIT_RESPONSE_TYPES.SUCCESS | Form.SUBMIT_RESPONSE_TYPES.FAILURE,
+  message: string,
+  show: bool,
+}
+```

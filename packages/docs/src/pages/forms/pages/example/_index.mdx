@@ -1,0 +1,141 @@
+---
+name: Example
+route: /form/example
+menu: Form
+---
+
+import '../../../../config';
+import { Playground } from 'docz';
+import Form from '@diegofrayo/form';
+import { Space } from '@diegofrayo/components';
+import { Markdown } from '../../../../components';
+import {
+  Button,
+  Container,
+  FormGroup,
+  Input,
+  InputEmail,
+  Label,
+  SubmitResponse,
+} from './components';
+import formConfig from './formConfig.js';
+import onSubmit from './onSubmit.js';
+
+# Example
+
+## Docs
+
+<Markdown
+  md={`You can see the source code of this example [here](https://github.com/diegofrayo/code/tree/master/packages/docs/src/pages/form/pages/example)`}
+/>
+
+## Playground
+
+<Playground>
+  <Form
+    defaultValues={{ email: 'test@gmail.com', birthDate: '2019-04-19' }}
+    config={formConfig}
+    onSubmit={onSubmit}
+    submitResponseMessages={{
+      failure: res => res.data.message,
+      success: 'Sign up succesfully.',
+    }}
+  >
+    {({
+      values,
+      errors,
+      status,
+      onInputChange,
+      onSubmit,
+      updaters,
+      submitResponse,
+      resetSubmitResponse,
+    }) => {
+      return (
+        <Container>
+          <FormGroup error={!!errors.email}>
+            <Label htmlFor={formConfig.email.inputAttrs.id}>
+              Email {formConfig.email.required ? '*' : ''}
+            </Label>
+            <InputEmail
+              name="email"
+              value={values.email}
+              updaters={updaters}
+              required={formConfig.email.required}
+              {...formConfig.email.inputAttrs}
+            />
+            <Input.Error>{errors.email}</Input.Error>
+          </FormGroup>
+
+          <Space />
+
+          <FormGroup error={!!errors.password}>
+            <Label htmlFor={formConfig.password.inputAttrs.id}>
+              Password {formConfig.password.required ? '*' : ''}
+            </Label>
+            <Input
+              name="password"
+              value={values.password}
+              onChange={onInputChange}
+              {...formConfig.password.inputAttrs}
+            />
+            <Input.Error>{errors.password}</Input.Error>
+          </FormGroup>
+
+          <Space />
+
+          <FormGroup error={!!errors.bio}>
+            <Label htmlFor={formConfig.bio.inputAttrs.id}>
+              Bio {formConfig.bio.required ? '*' : ''}
+            </Label>
+            <Input
+              name="bio"
+              value={values.bio}
+              onChange={onInputChange}
+              {...formConfig.bio.inputAttrs}
+            />
+            <Input.Error>{errors.bio}</Input.Error>
+          </FormGroup>
+
+          <Space />
+
+          <FormGroup error={!!errors.birthDate}>
+            <Label htmlFor={formConfig.birthDate.inputAttrs.id}>
+              Birth Date {formConfig.birthDate.required ? '*' : ''}
+            </Label>
+            <Input
+              name="birthDate"
+              value={values.birthDate}
+              onChange={onInputChange}
+              {...formConfig.birthDate.inputAttrs}
+            />
+            <Input.Error>{errors.birthDate}</Input.Error>
+          </FormGroup>
+
+          <Space />
+
+          <FormGroup error={!!errors.age}>
+            <Label htmlFor={formConfig.age.inputAttrs.id}>
+              Age {formConfig.age.required ? '*' : ''}
+            </Label>
+            <Input
+              name="age"
+              value={values.age}
+              onChange={onInputChange}
+              {...formConfig.age.inputAttrs}
+            />
+            <Input.Error>{errors.age}</Input.Error>
+          </FormGroup>
+
+          <Space size={Space.SIZE.L} />
+
+          <SubmitResponse marginBottom={3} resetSubmitResponse={resetSubmitResponse} {...submitResponse} />
+
+          <Button disabled={status !== Form.STATUS.VALID} type="submit" onClick={onSubmit}>
+            {status === Form.STATUS.LOADING ? 'Loading...' : 'Sign Up'}
+          </Button>
+        </Container>
+      );
+    }}
+  </Form>
+</Playground>

@@ -1,0 +1,70 @@
+{
+  "name": "@diegofrayo/styles",
+  "version": "1.0.0",
+  "description": "Utilities to create components and css styles usign emotion.sh",
+  "license": "MIT",
+  "main": "dist/styles.js",
+  "module": "dist/styles.umd.js",
+  "homepage": "https://github.com/diegofrayo/code/styles#readme",
+  "keywords": [
+    "react styling",
+    "css-in-js"
+  ],
+  "bugs": {
+    "url": "https://github.com/diegofrayo/code/issues",
+    "email": "diegofrayo@gmail.com"
+  },
+  "author": {
+    "name": "Diego Rayo",
+    "email": "diegofrayo@gmail.com",
+    "url": "https://diegofrayo.netlify.com"
+  },
+  "repository": {
+    "url": "https://github.com/diegofrayo/code.git",
+    "type": "git"
+  },
+  "dependencies": {
+    "@emotion/core": "^10.0.9",
+    "@emotion/styled": "^10.0.9",
+    "classnames": "^2.2.6"
+  },
+  "devDependencies": {
+    "@diegofrayo/eslint-config": "1.0.0",
+    "eslint": "latest",
+    "husky": "^1.3.1",
+    "lint-staged": "^8.1.5",
+    "microbundle": "^0.11.0",
+    "prettier": "^1.16.4"
+  },
+  "peerDependencies": {
+    "react": "^16.8.4"
+  },
+  "scripts": {
+    "lint": "eslint -c eslintrc.json 'src/**/*.{js,jsx}'",
+    "prepublish": "yarn build",
+    "test": "echo 'Error no test specified' && exit 1",
+    "publish": "npm publish --access public",
+    "dev": "microbundle --entry src/index.js --output dist --jsx React.createElement --name @diegofrayo/styles --globals @emotion/core=emt_core,prop-types=PropTypes,@emotion/styled=emt_styled --watch --no-compress",
+    "build": "microbundle --entry src/index.js --output dist --jsx React.createElement --name @diegofrayo/styles --globals @emotion/core=emt_core,prop-types=PropTypes,@emotion/styled=emt_styled"
+  },
+  "files": [
+    "dist",
+    "package.json",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=8.15.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn test && lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "prettier --write",
+      "eslint",
+      "git add"
+    ]
+  }
+}
