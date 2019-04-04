@@ -65,6 +65,7 @@ typings/
 .DS_Store
 config.sublime-workspace
 /docs
-dist
+**/dist/**/*.map
+**/dist/**/*.mjs
 packages/docs-site
 packages/fetch
