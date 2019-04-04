@@ -39,7 +39,7 @@ Input.propTypes = {
     .isRequired,
 
   className: PropTypes.string,
-  htmlAttrs: PropTypes.object, // eslint-disable-line
+  htmlAttrs: PropTypes.object,
   id: PropTypes.string,
   required: PropTypes.bool,
 

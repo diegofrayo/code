@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="googlebot" content="noindex,nofollow" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <title>Sign In</title>
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase.js"></script>
+  </head>
+  <body>
+    <main>
+      <form id="form-sign-in">
+        <input type="email" placeholder="email" id="input-email" />
+        <input type="password" placeholder="password" id="input-password" />
+        <button type="submit">sign in</button>
+      </form>
+    </main>
+    <script>
+      const setCookie = (name, value, expirationDays, path) => {
+        const d = new Date();
+        d.setTime(d.getTime() + 24 * 60 * 60 * 1000 * expirationDays);
+        document.cookie = `${name}=${value};expires=${d.toUTCString()};path=${path}`;
+      };
+
+      const onSuccess = () => {
+        setCookie('auth', true, 365, '/');
+        window.location.href = '/';
+      };
+
+      const onFailure = err => {
+        alert(err.message);
+      };
+
+      const initFirebase = () => {
+        firebase.initializeApp({
+          apiKey: 'AIzaSyBjv2Rn5l87MrLxMVO5FmIO1exyV4Rmx1U',
+          authDomain: 'tests-38950.firebaseapp.com',
+          databaseURL: 'https://tests-38950.firebaseio.com',
+        });
+      };
+
+      document.addEventListener(
+        'DOMContentLoaded',
+        () => {
+          initFirebase();
+
+          document.getElementById('form-sign-in').addEventListener('submit', event => {
+            event.preventDefault();
+
+            firebase
+              .auth()
+              .signInWithEmailAndPassword(
+                document.getElementById('input-email').value,
+                document.getElementById('input-password').value,
+              )
+              .then(onSuccess)
+              .catch(onFailure);
+          });
+        },
+        false,
+      );
+    </script>
+  </body>
+</html>

@@ -21,11 +21,11 @@ class Form extends React.Component {
 
   static propTypes = {
     // See docs: https://diegofrayo-docs.netlify.com
-    config: PropTypes.object.isRequired, // eslint-disable-line
+    config: PropTypes.object.isRequired,
     children: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
 
-    defaultValues: PropTypes.object, // eslint-disable-line
+    defaultValues: PropTypes.object,
     submitResponseMessages: PropTypes.shape({
       success: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
       failure: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),

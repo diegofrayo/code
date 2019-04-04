@@ -113,7 +113,8 @@ class InputEmail extends React.Component {
 }
 
 InputEmail.propTypes = {
-  updaters: PropTypes.object.isRequired, // eslint-disable-line
+  updaters: PropTypes.object.isRequired,
+
   required: PropTypes.bool,
 };
 

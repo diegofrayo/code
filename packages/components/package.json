@@ -44,7 +44,7 @@
     "test": "echo 'Error no test specified' && exit 1",
     "publish": "npm publish --access public",
     "dev": "microbundle --entry src/no-styled/index.js --output dist --jsx React.createElement --name @diegofrayo/components --globals @emotion/core=emt_core,prop-types=PropTypes,@diegofrayo/styles=dfr_styles --watch --no-compress",
-    "build:assets": "node node-script.js",
+    "build:assets": "node build.js",
     "build:no-styled": "microbundle --entry src/no-styled/index.js --output dist --jsx React.createElement --name @diegofrayo/components --globals @emotion/core=emt_core,prop-types=PropTypes,@diegofrayo/styles=dfr_styles",
     "build:styled": "microbundle --entry src/styled/index.js --output dist/styled --jsx React.createElement --name @diegofrayo/components/styled --globals @emotion/core=emt_core,prop-types=PropTypes,@diegofrayo/styles=dfr_styles",
     "build": "npm run build:no-styled && npm run build:styled && npm run build:assets"

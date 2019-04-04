@@ -1,7 +1,7 @@
 export default {
   title: '@diegofrayo/code',
   description: 'This is a documentation for some own JavaScript packages',
-  dest: '../docs-site/public',
+  dest: './static/public',
   themeConfig: {
     mode: 'dark',
     colors: {

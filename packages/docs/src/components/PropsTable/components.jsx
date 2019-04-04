@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { styled, utilities as stylesUtilities } from '@diegofrayo/styles';
+import { Box } from '@diegofrayo/components';
 
 const getDefaultValue = defaultValue => {
   if (defaultValue === undefined) {
@@ -118,9 +119,10 @@ PropsTable.Title = styled('h3')(
 );
 
 PropsTable.propTypes = {
+  parsedPropTypes: PropTypes.object.isRequired,
+
   parentName: PropTypes.string,
-  propsDescription: PropTypes.object, // eslint-disable-line
-  parsedPropTypes: PropTypes.object.isRequired, // eslint-disable-line
+  propsDescription: PropTypes.object,
 };
 
 PropsTable.defaultProps = {
@@ -128,4 +130,11 @@ PropsTable.defaultProps = {
   propsDescription: {},
 };
 
-export default PropsTable;
+const Container = styled(Box)(
+  () => `
+    max-width: 100%;
+    overflow: auto;
+  `,
+);
+
+export { PropsTable, Container };

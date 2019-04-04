@@ -19,16 +19,26 @@ module.exports = {
     window: true,
   },
   rules: {
-    // https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules
-    'import/extensions': 0,
-    'import/no-unresolved': 0,
-
     // https://eslint.org/docs/rules/
     'arrow-body-style': 0,
     'no-console': 0,
     'no-continue': 0,
 
+    // https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules
+    'import/extensions': 0,
+    'import/no-unresolved': 0,
+
+    // https://github.com/yannickcr/eslint-plugin-react/tree/master/docs/rules
+    'react/forbid-prop-types': 0,
+
     // -----------------------
+
+    // https://eslint.org/docs/rules/
+    'no-param-reassign': 1,
+    'no-unreachable': 1,
+    'no-unused-expressions': 1,
+    'no-unused-vars': 1,
+    'prefer-promise-reject-errors': 1,
 
     // https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules
     'import/prefer-default-export': 1,
@@ -38,16 +48,8 @@ module.exports = {
     'jsx-a11y/label-has-associated-control': 1,
     'jsx-a11y/no-noninteractive-element-interactions': 1,
 
-    // https://eslint.org/docs/rules/
-    'no-param-reassign': 1,
-    'no-unreachable': 1,
-    'no-unused-expressions': 1,
-    'no-unused-vars': 1,
-    'prefer-promise-reject-errors': 1,
-
     // https://github.com/yannickcr/eslint-plugin-react/tree/master/docs/rules
     'react/destructuring-assignment': 1,
-    'react/forbid-prop-types': 1,
     'react/prefer-stateless-function': 1,
     'react/sort-comp': [
       1,

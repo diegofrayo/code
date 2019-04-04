@@ -5,6 +5,7 @@
   "license": "MIT",
   "main": "dist/validator.js",
   "module": "dist/validator.mjs",
+  "unpkg": "dist/validator.umd.js",
   "homepage": "https://github.com/diegofrayo/code/validator#readme",
   "keywords": [
     "types validator",

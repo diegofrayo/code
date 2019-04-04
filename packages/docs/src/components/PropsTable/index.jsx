@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import parsePropTypes from 'parse-prop-types';
-import { Box, Space } from '@diegofrayo/components';
+import { Space } from '@diegofrayo/components';
 
-import PropsTableComponent from './components';
+import { PropsTable as PropsTableComponent, Container } from './components';
 
 class PropsTable extends React.Component {
   render() {
@@ -18,7 +18,7 @@ class PropsTable extends React.Component {
     }, []);
 
     return (
-      <Box overflowX="auto" maxWidth="100%">
+      <Container>
         <PropsTableComponent
           parsedPropTypes={propTypes}
           propsDescription={propsDescription}
@@ -26,24 +26,25 @@ class PropsTable extends React.Component {
         <Space />
         {shapes.map(shape => {
           return (
-            <Box key={shape.name} overflowX="auto" maxWidth="100%">
+            <Container key={shape.name}>
               <PropsTableComponent.Title>{shape.name}</PropsTableComponent.Title>
               <PropsTableComponent
                 parentName={shape.name}
                 parsedPropTypes={shape.value}
                 propsDescription={propsDescription}
               />
-            </Box>
+            </Container>
           );
         })}
-      </Box>
+      </Container>
     );
   }
 }
 
 PropsTable.propTypes = {
-  component: PropTypes.any.isRequired, // eslint-disable-line
-  propsDescription: PropTypes.object, // eslint-disable-line
+  component: PropTypes.any.isRequired,
+
+  propsDescription: PropTypes.object,
 };
 
 PropsTable.defaultProps = {

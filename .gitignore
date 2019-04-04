@@ -61,11 +61,10 @@ typings/
 .next
 
 # own
-.docz
 .DS_Store
 config.sublime-workspace
 /docs
+.docz
 **/dist/**/*.map
-**/dist/**/*.mjs
-packages/docs-site
 packages/fetch
+packages/docs/static/public

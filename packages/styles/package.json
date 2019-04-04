@@ -4,7 +4,8 @@
   "description": "Utilities to create components and css styles usign emotion.sh",
   "license": "MIT",
   "main": "dist/styles.js",
-  "module": "dist/styles.umd.js",
+  "module": "dist/styles.mjs",
+  "unpkg": "dist/styles.umd.js",
   "homepage": "https://github.com/diegofrayo/code/styles#readme",
   "keywords": [
     "react styling",
