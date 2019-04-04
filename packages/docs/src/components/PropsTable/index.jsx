@@ -18,7 +18,7 @@ class PropsTable extends React.Component {
     }, []);
 
     return (
-      <Box>
+      <Box overflowX="auto" maxWidth="100%">
         <PropsTableComponent
           parsedPropTypes={propTypes}
           propsDescription={propsDescription}
@@ -26,7 +26,7 @@ class PropsTable extends React.Component {
         <Space />
         {shapes.map(shape => {
           return (
-            <Box key={shape.name}>
+            <Box key={shape.name} overflowX="auto" maxWidth="100%">
               <PropsTableComponent.Title>{shape.name}</PropsTableComponent.Title>
               <PropsTableComponent
                 parentName={shape.name}

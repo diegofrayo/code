@@ -5,7 +5,6 @@
   "license": "MIT",
   "main": "dist/components.js",
   "module": "dist/components.umd.js",
-  "unpkg": "dist/components.mjs",
   "homepage": "https://github.com/diegofrayo/code/components#readme",
   "keywords": [
     "react components"

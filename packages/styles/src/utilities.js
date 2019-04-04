@@ -49,18 +49,16 @@ export const spacingY = (property, value) => {
 };
 
 export const getUnits = (value, themeValues) => {
-  if (typeof value === 'string') {
-    return value;
-  }
+  let finalValue = value;
 
-  if (!Array.isArray(themeValues)) {
-    return `${value}px`;
-  }
+  if (Array.isArray(themeValues)) {
+    finalValue = themeValues[value];
 
-  const finalValue = themeValues[value];
+    if (finalValue === undefined) {
+      return themeValues.default;
+    }
 
-  if (finalValue === undefined) {
-    return themeValues.default;
+    return finalValue;
   }
 
   if (typeof finalValue === 'number') {

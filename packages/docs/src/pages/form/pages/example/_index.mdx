@@ -54,7 +54,7 @@ import onSubmit from './onSubmit.js';
       return (
         <Container>
           <FormGroup error={!!errors.email}>
-            <Label htmlFor={formConfig.email.inputAttrs.id}>
+            <Label htmlFor={formConfig.email.htmlAttrs.id}>
               Email {formConfig.email.required ? '*' : ''}
             </Label>
             <InputEmail
@@ -62,7 +62,7 @@ import onSubmit from './onSubmit.js';
               value={values.email}
               updaters={updaters}
               required={formConfig.email.required}
-              {...formConfig.email.inputAttrs}
+              htmlAttrs={formConfig.email.htmlAttrs}
             />
             <Input.Error>{errors.email}</Input.Error>
           </FormGroup>
@@ -70,14 +70,14 @@ import onSubmit from './onSubmit.js';
           <Space />
 
           <FormGroup error={!!errors.password}>
-            <Label htmlFor={formConfig.password.inputAttrs.id}>
+            <Label htmlFor={formConfig.password.htmlAttrs.id}>
               Password {formConfig.password.required ? '*' : ''}
             </Label>
             <Input
               name="password"
               value={values.password}
               onChange={onInputChange}
-              {...formConfig.password.inputAttrs}
+              htmlAttrs={formConfig.password.htmlAttrs}
             />
             <Input.Error>{errors.password}</Input.Error>
           </FormGroup>
@@ -85,14 +85,14 @@ import onSubmit from './onSubmit.js';
           <Space />
 
           <FormGroup error={!!errors.bio}>
-            <Label htmlFor={formConfig.bio.inputAttrs.id}>
+            <Label htmlFor={formConfig.bio.htmlAttrs.id}>
               Bio {formConfig.bio.required ? '*' : ''}
             </Label>
             <Input
               name="bio"
               value={values.bio}
               onChange={onInputChange}
-              {...formConfig.bio.inputAttrs}
+              htmlAttrs={formConfig.bio.htmlAttrs}
             />
             <Input.Error>{errors.bio}</Input.Error>
           </FormGroup>
@@ -100,14 +100,15 @@ import onSubmit from './onSubmit.js';
           <Space />
 
           <FormGroup error={!!errors.birthDate}>
-            <Label htmlFor={formConfig.birthDate.inputAttrs.id}>
+            <Label htmlFor={formConfig.birthDate.htmlAttrs.id}>
               Birth Date {formConfig.birthDate.required ? '*' : ''}
             </Label>
             <Input
               name="birthDate"
               value={values.birthDate}
               onChange={onInputChange}
-              {...formConfig.birthDate.inputAttrs}
+              minWidth="100%"
+              htmlAttrs={formConfig.birthDate.htmlAttrs}
             />
             <Input.Error>{errors.birthDate}</Input.Error>
           </FormGroup>
@@ -115,14 +116,14 @@ import onSubmit from './onSubmit.js';
           <Space />
 
           <FormGroup error={!!errors.age}>
-            <Label htmlFor={formConfig.age.inputAttrs.id}>
+            <Label htmlFor={formConfig.age.htmlAttrs.id}>
               Age {formConfig.age.required ? '*' : ''}
             </Label>
             <Input
               name="age"
               value={values.age}
               onChange={onInputChange}
-              {...formConfig.age.inputAttrs}
+              htmlAttrs={formConfig.age.htmlAttrs}
             />
             <Input.Error>{errors.age}</Input.Error>
           </FormGroup>

@@ -8,13 +8,13 @@
 			"path": "/Applications/XAMPP/xamppfiles/htdocs/dev/personal/notes/assets/md"
 		},
 		{
-			"path": "/Applications/XAMPP/xamppfiles/htdocs/dev/personal/notes"
-		},
-		{
 			"path": "/Applications/XAMPP/xamppfiles/htdocs/dev/personal/boilerplate"
 		},
 		{
 			"path": "/Applications/XAMPP/xamppfiles/htdocs/dev/personal/archived"
+		},
+		{
+			"path": "/Applications/XAMPP/xamppfiles/htdocs/dev/personal/homepage"
 		}
 	],
 	"settings":

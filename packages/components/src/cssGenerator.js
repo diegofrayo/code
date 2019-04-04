@@ -75,6 +75,27 @@ const cssConstructor = {
     if (value === undefined) return '';
     return spacingY(getUnits(value, theme.spacing));
   },
+  width: value => {
+    if (value === undefined) return '';
+    return `width: ${getUnits(value, null)};`;
+  },
+  minWidth: value => {
+    if (value === undefined) return '';
+    return `min-width: ${getUnits(value)};`;
+  },
+  maxWidth: value => {
+    if (value === undefined) return '';
+    return `max-width: ${getUnits(value)};`;
+  },
+  overflow: value => {
+    if (value === undefined) return '';
+    return `overflow: ${value};`;
+  },
+  overflowX: value => {
+    console.log(value);
+    if (value === undefined) return '';
+    return `overflow-x: ${value};`;
+  },
 };
 
 const cssGenerator = props => {

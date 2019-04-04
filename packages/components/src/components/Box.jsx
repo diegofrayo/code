@@ -3,6 +3,7 @@ import { jsx } from '@emotion/core';
 import PropTypes from 'prop-types';
 import { css, concatClassnames, renderChildren } from '@diegofrayo/styles';
 
+import cssPropTypes from '../cssPropTypes';
 import cssGenerator from '../cssGenerator';
 
 const classes = {
@@ -40,6 +41,10 @@ Box.propTypes = {
   ]).isRequired,
 
   is: PropTypes.oneOf(['div', 'section', 'article', 'main', 'modal', 'header']),
+
+  ...cssPropTypes.color,
+  ...cssPropTypes.fonts,
+  ...cssPropTypes.spacing,
 };
 
 Box.defaultProps = {

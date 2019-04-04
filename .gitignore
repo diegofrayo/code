@@ -61,9 +61,10 @@ typings/
 .next
 
 # own
+.docz
 .DS_Store
+config.sublime-workspace
 /docs
 dist
-.docz
-packages/fetch
 packages/docs-site
+packages/fetch

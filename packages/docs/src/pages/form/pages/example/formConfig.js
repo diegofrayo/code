@@ -5,7 +5,7 @@ export default {
     type: 'string',
     required: true,
     customValidation: true,
-    inputAttrs: {
+    htmlAttrs: {
       id: 'input-email',
       placeholder: 'email@domain.co',
       type: 'email',
@@ -15,7 +15,7 @@ export default {
     type: 'string',
     required: true,
     errorMessage: 'The password must have at least 5 characters',
-    inputAttrs: {
+    htmlAttrs: {
       id: 'input-password',
       placeholder: '',
       type: 'password',
@@ -32,7 +32,7 @@ export default {
   bio: {
     type: 'string',
     required: false,
-    inputAttrs: {
+    htmlAttrs: {
       id: 'input-bio',
       placeholder: 'Bio',
       type: 'text',
@@ -42,7 +42,7 @@ export default {
     type: 'string',
     required: true,
     errorMessage: 'Select a birth date',
-    inputAttrs: {
+    htmlAttrs: {
       id: 'input-birth-date',
       placeholder: '',
       type: 'date',
@@ -64,7 +64,7 @@ export default {
     required: true,
     defaultValue: 18,
     errorMessage: 'Type a valid age',
-    inputAttrs: {
+    htmlAttrs: {
       id: 'input-age',
       max: 80,
       min: 18,

@@ -1,12 +1,18 @@
 {
   "name": "@diegofrayo/code",
   "version": "1.0.0",
-  "description": "monorepo that contains some some own JavaScript packages and their docs",
+  "description": "monorepo that contains some own JavaScript packages and their docs",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "build": "node build.js"
+  },
   "workspaces": {
     "packages": [
       "packages/*"
     ]
+  },
+  "dependencies": {
+    "shelljs": "^0.8.3"
   }
 }

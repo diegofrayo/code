@@ -33,10 +33,10 @@ export const utilities = {
     const value = values[prop];
     return value !== undefined ? `${cssProp}: ${value}` : '';
   },
-  marginX: value => spacingX('margin', getUnits(value, getTheme().margin)),
-  marginY: value => spacingY('margin', getUnits(value, getTheme().margin)),
-  paddingX: value => spacingX('padding', getUnits(value, getTheme().padding)),
-  paddingY: value => spacingY('padding', getUnits(value, getTheme().padding)),
+  marginX: value => spacingX('margin', getUnits(value, getTheme().spacing)),
+  marginY: value => spacingY('margin', getUnits(value, getTheme().spacing)),
+  paddingX: value => spacingX('padding', getUnits(value, getTheme().spacing)),
+  paddingY: value => spacingY('padding', getUnits(value, getTheme().spacing)),
 };
 
 export const css = param => {
