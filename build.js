@@ -5,7 +5,4 @@ shell.cd('packages/docs');
 shell.exec('yarn install');
 shell.exec('yarn build');
 
-fs.copyFileSync(
-  './packages/docs/static/sign-in.html',
-  './packages/docs/static/public/sign-in.html',
-);
+fs.copyFileSync('./static/sign-in.html', './static/public/sign-in.html');

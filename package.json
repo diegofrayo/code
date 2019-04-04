@@ -8,12 +8,12 @@
     "build": "node build.js",
     "build:all": "node build-all.js"
   },
+  "dependencies": {
+    "shelljs": "^0.8.3"
+  },
   "workspaces": {
     "packages": [
       "packages/*"
     ]
-  },
-  "dependencies": {
-    "shelljs": "^0.8.3"
   }
 }
