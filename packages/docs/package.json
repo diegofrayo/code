@@ -28,15 +28,15 @@
     "@diegofrayo/form": "1.0.0",
     "@diegofrayo/styles": "1.0.0",
     "@diegofrayo/validator": "1.0.0",
-    "parse-prop-types": "^0.3.0",
     "docz": "^0.13.7",
+    "docz-theme-default": "^0.13.7",
+    "parse-prop-types": "^0.3.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.4",
     "showdown": "^1.9.0"
   },
   "devDependencies": {
     "@diegofrayo/eslint-config": "1.0.0",
-    "docz-theme-default": "^0.13.7",
     "eslint": "latest"
   },
   "engines": {

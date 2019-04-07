@@ -65,6 +65,6 @@ typings/
 config.sublime-workspace
 /docs
 .docz
-**/dist/**/*.map
+dist/
 packages/fetch
 packages/docs/static/public

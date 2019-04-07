@@ -5,11 +5,13 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "node build.js",
-    "build:all": "node build-all.js"
+    "build:docs": "node build.js --build-docs",
+    "build:all": "node build.js --build-all",
+    "lint:all": "node build.js --lint-all"
   },
   "dependencies": {
-    "shelljs": "^0.8.3"
+    "shelljs": "^0.8.3",
+    "yargs": "^13.2.2"
   },
   "workspaces": {
     "packages": [
