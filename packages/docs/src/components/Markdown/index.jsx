@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import showdown from 'showdown';
 
@@ -30,7 +30,11 @@ const configureLinks = () => {
 
 const Markdown = ({ md }) => {
   const html = mdParser.makeHtml(md, 'utf8');
-  setTimeout(configureLinks, 1000); // TODO: Use hooks
+
+  useEffect(() => {
+    setTimeout(configureLinks, 1000);
+  });
+
   return <Container className="md-viewer" dangerouslySetInnerHTML={{ __html: html }} />;
 };
 

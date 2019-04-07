@@ -74,7 +74,7 @@ class InputEmail extends React.Component {
       if (this.blurCounter % 2 === 0) {
         updateErrorMessage(name);
       } else {
-        updateErrorMessage(name, 'This email is used by other account.');
+        updateErrorMessage(name, 'This email is used by other account');
       }
 
       this.setState({ isLoading: false });

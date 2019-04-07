@@ -36,7 +36,7 @@
     "lint": "eslint -c eslintrc.json 'src/**/*.{js,jsx}'",
     "prepublish": "yarn build",
     "test": "echo 'Error no test specified' && exit 1",
-    "publish": "npm publish --access public",
+    "upload": "npm publish --access public",
     "dev": "microbundle --entry src/index.js --output dist --jsx React.createElement --name @diegofrayo/validator --watch --no-compress",
     "build": "microbundle --entry src/index.js --output dist --jsx React.createElement --name @diegofrayo/validator"
   },

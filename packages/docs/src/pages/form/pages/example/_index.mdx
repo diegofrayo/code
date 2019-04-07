@@ -21,6 +21,8 @@ import {
 import formConfig from './formConfig.js';
 import onSubmit from './onSubmit.js';
 
+
+
 # Example
 
 ## Docs
@@ -28,6 +30,8 @@ import onSubmit from './onSubmit.js';
 <Markdown
   md={`You can see the source code of this example [here](https://github.com/diegofrayo/code/tree/master/packages/docs/src/pages/form/pages/example)`}
 />
+
+
 
 ## Playground
 
@@ -38,18 +42,18 @@ import onSubmit from './onSubmit.js';
     onSubmit={onSubmit}
     submitResponseMessages={{
       failure: res => res.data.message,
-      success: 'Sign up succesfully.',
+      success: 'Sign up succesfully',
     }}
   >
     {({
-      values,
       errors,
-      status,
       onInputChange,
       onSubmit,
-      updaters,
-      submitResponse,
       resetSubmitResponse,
+      status,
+      submitResponse,
+      updaters,
+      values,
     }) => {
       return (
         <Container>
@@ -130,9 +134,17 @@ import onSubmit from './onSubmit.js';
 
           <Space size={Space.SIZE.L} />
 
-          <SubmitResponse marginBottom={3} resetSubmitResponse={resetSubmitResponse} {...submitResponse} />
+          <SubmitResponse
+            marginBottom={3}
+            resetSubmitResponse={resetSubmitResponse}
+            {...submitResponse}
+          />
 
-          <Button disabled={status !== Form.STATUS.VALID} type="submit" onClick={onSubmit}>
+          <Button
+            disabled={status !== Form.STATUS.VALID}
+            type="submit"
+            onClick={onSubmit}
+          >
             {status === Form.STATUS.LOADING ? 'Loading...' : 'Sign Up'}
           </Button>
         </Container>

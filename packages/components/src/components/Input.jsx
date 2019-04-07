@@ -12,6 +12,7 @@ const Input = ({
   required,
   value,
   onChange,
+  onBlur,
   className,
   htmlAttrs,
   ...rest
@@ -25,6 +26,7 @@ const Input = ({
       required={required}
       value={value}
       onChange={onChange}
+      onBlur={onBlur}
       className={concatClassnames('dfr-input', className)}
       css={cssClassName}
       {...htmlAttrs}
@@ -41,6 +43,7 @@ Input.propTypes = {
   className: PropTypes.string,
   htmlAttrs: PropTypes.object,
   id: PropTypes.string,
+  onBlur: PropTypes.func,
   required: PropTypes.bool,
 
   ...cssPropTypes.layout,
@@ -50,6 +53,7 @@ Input.defaultProps = {
   className: '',
   htmlAttrs: {},
   id: '',
+  onBlur: undefined,
   required: false,
 };
 
