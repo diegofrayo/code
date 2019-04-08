@@ -1,0 +1,51 @@
+{
+  "name": "@diegofrayo/utilities",
+  "version": "1.0.0",
+  "description": "JavaScript functions that I use on some own projects",
+  "license": "MIT",
+  "main": "dist/utilities.js",
+  "module": "dist/utilities.mjs",
+  "unpkg": "dist/utilities.umd.js",
+  "homepage": "https://github.com/diegofrayo/code/utilities#readme",
+  "bugs": {
+    "url": "https://github.com/diegofrayo/code/issues",
+    "email": "diegofrayo@gmail.com"
+  },
+  "author": {
+    "name": "Diego Rayo",
+    "email": "diegofrayo@gmail.com",
+    "url": "https://diegofrayo.netlify.com"
+  },
+  "repository": {
+    "url": "https://github.com/diegofrayo/code.git",
+    "type": "git"
+  },
+  "scripts": {
+    "upload": "npm publish --access public"
+  },
+  "files": [
+    "dist/*.js",
+    "dist/*.mjs",
+    "package.json",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=8.15.1"
+  },
+  "devDependencies": {
+    "@diegofrayo/eslint-config": "1.0.0",
+    "eslint": "latest",
+    "husky": "^1.3.1",
+    "lint-staged": "^8.1.5",
+    "microbundle": "^0.11.0",
+    "prettier": "^1.16.4"
+  },
+  "scripts": {
+    "lint": "eslint -c eslintrc.json 'src/index.js'",
+    "prepublish": "yarn build",
+    "test": "echo 'Error no test specified' && exit 1",
+    "upload": "npm publish --access public",
+    "dev": "microbundle --entry src/index.js --output dist --jsx React.createElement --name dfrz --watch --no-compress",
+    "build": "microbundle --entry src/index.js --output dist --jsx React.createElement --name dfrz"
+  }
+}

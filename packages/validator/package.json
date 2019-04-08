@@ -33,7 +33,7 @@
     "prettier": "^1.16.4"
   },
   "scripts": {
-    "lint": "eslint -c eslintrc.json 'src/**/*.{js,jsx}'",
+    "lint": "eslint -c eslintrc.json 'src/**/*.js'",
     "prepublish": "yarn build",
     "test": "echo 'Error no test specified' && exit 1",
     "upload": "npm publish --access public",
@@ -41,7 +41,8 @@
     "build": "microbundle --entry src/index.js --output dist --jsx React.createElement --name @diegofrayo/validator"
   },
   "files": [
-    "dist",
+    "dist/*.js",
+    "dist/*.mjs",
     "package.json",
     "README.md"
   ],

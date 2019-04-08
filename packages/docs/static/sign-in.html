@@ -10,6 +10,7 @@
     />
     <title>Sign In</title>
     <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase.js"></script>
+    <script src="https://unpkg.com/@diegofrayo/utilities"></script>
   </head>
   <body>
     <main>
@@ -20,14 +21,8 @@
       </form>
     </main>
     <script>
-      const setCookie = (name, value, expirationDays, path) => {
-        const d = new Date();
-        d.setTime(d.getTime() + 24 * 60 * 60 * 1000 * expirationDays);
-        document.cookie = `${name}=${value};expires=${d.toUTCString()};path=${path}`;
-      };
-
       const onSuccess = () => {
-        setCookie('auth', true, 365, '/');
+        window.dfrz.setCookie();
         window.location.href = '/';
       };
 

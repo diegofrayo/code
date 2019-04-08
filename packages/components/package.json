@@ -50,8 +50,8 @@
     "build": "npm run build:no-styled && npm run build:styled && npm run build:assets"
   },
   "files": [
-    "dist",
-    "dist/styled",
+    "dist/**/*.js",
+    "dist/**/*.svg",
     "package.json",
     "README.md"
   ],

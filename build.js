@@ -2,7 +2,7 @@ const fs = require('fs');
 const shell = require('shelljs');
 const { argv } = require('yargs');
 
-const PROJECTS = ['components', 'form', 'styles', 'validator', 'docs'];
+const PROJECTS = ['components', 'form', 'styles', 'utilities', 'validator', 'docs'];
 
 const buildDocs = () => {
   shell.cd('packages/docs');

@@ -27,6 +27,7 @@
     "@diegofrayo/components": "1.0.0",
     "@diegofrayo/form": "1.0.0",
     "@diegofrayo/styles": "1.0.0",
+    "@diegofrayo/utilities": "1.0.0",
     "@diegofrayo/validator": "1.0.0",
     "docz": "^0.13.7",
     "docz-theme-default": "^0.13.7",

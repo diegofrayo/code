@@ -46,7 +46,8 @@
     "build": "microbundle --entry src/index.jsx --output dist --jsx React.createElement --name @diegofrayo/form --globals prop-types=PropTypes"
   },
   "files": [
-    "dist",
+    "dist/*.js",
+    "dist/*.mjs",
     "package.json",
     "README.md"
   ],
