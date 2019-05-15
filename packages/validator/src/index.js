@@ -79,11 +79,11 @@ const Validator = (value, isValid) => {
   };
 };
 
-const Validate = value => {
+const validate = value => {
   return Validator(value, true);
 };
 
-export const createScheme = struct => {
+const createScheme = struct => {
   return {
     validate: value => {
       let validationResult = typeof value === 'object';
@@ -95,7 +95,7 @@ export const createScheme = struct => {
           (acum, [ruleKey, ruleConfig]) => {
             return acum[ruleKey](ruleConfig);
           },
-          Validate(value[structItem]),
+          validate(value[structItem]),
         );
 
         validationResult = validationResult && validator.exec();
@@ -106,4 +106,4 @@ export const createScheme = struct => {
   };
 };
 
-export default Validate;
+export { createScheme, validate };

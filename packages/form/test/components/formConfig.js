@@ -4,11 +4,19 @@ export default {
   email: {
     type: 'string',
     required: true,
-    customValidation: true,
+    errorMessage: 'Type a valid email',
     htmlAttrs: {
       id: 'input-email',
       placeholder: 'email@domain.co',
       type: 'email',
+      required: '',
+    },
+    handlers: {
+      isValid: value => {
+        return validate(value)
+          .email()
+          .exec();
+      },
     },
   },
   password: {
@@ -20,6 +28,7 @@ export default {
       placeholder: '',
       type: 'password',
       autoComplete: 'password',
+      required: '',
     },
     handlers: {
       isValid: value => {
@@ -37,6 +46,13 @@ export default {
       placeholder: 'Bio',
       type: 'text',
     },
+    handlers: {
+      isValid: value => {
+        return validate(value)
+          .string()
+          .exec();
+      },
+    },
   },
   birthDate: {
     type: 'string',
@@ -46,6 +62,7 @@ export default {
       id: 'input-birth-date',
       placeholder: '',
       type: 'date',
+      required: '',
     },
     handlers: {
       isValid: value => {
@@ -69,6 +86,7 @@ export default {
       max: 80,
       min: 18,
       type: 'number',
+      required: '',
     },
     handlers: {
       isValid: value => {

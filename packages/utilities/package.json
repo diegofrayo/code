@@ -20,9 +20,6 @@
     "url": "https://github.com/diegofrayo/code.git",
     "type": "git"
   },
-  "scripts": {
-    "upload": "npm publish --access public"
-  },
   "files": [
     "dist/*.js",
     "dist/*.mjs",
@@ -43,9 +40,20 @@
   "scripts": {
     "lint": "eslint -c eslintrc.json 'src/index.js'",
     "prepublish": "yarn build",
-    "test": "echo 'Error no test specified' && exit 1",
     "upload": "npm publish --access public",
-    "dev": "microbundle --entry src/index.js --output dist --jsx React.createElement --name dfrz --watch --no-compress",
-    "build": "microbundle --entry src/index.js --output dist --jsx React.createElement --name dfrz"
+    "dev": "microbundle --entry src/index.js --output dist --name dfrz --watch --no-compress",
+    "build": "microbundle --entry src/index.js --output dist --name dfrz"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/*.js": [
+      "prettier --write",
+      "eslint",
+      "git add"
+    ]
   }
 }

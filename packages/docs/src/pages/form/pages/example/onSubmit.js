@@ -8,6 +8,7 @@ const onSubmit = values => {
       counter += 1;
 
       if (counter % 2 === 0) {
+        // eslint-disable-next-line
         return reject({
           error: true,
           data: { message: 'Sign up failed', code: '001' },

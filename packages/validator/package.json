@@ -37,8 +37,8 @@
     "prepublish": "yarn build",
     "test": "echo 'Error no test specified' && exit 1",
     "upload": "npm publish --access public",
-    "dev": "microbundle --entry src/index.js --output dist --jsx React.createElement --name @diegofrayo/validator --watch --no-compress",
-    "build": "microbundle --entry src/index.js --output dist --jsx React.createElement --name @diegofrayo/validator"
+    "dev": "microbundle --entry src/index.js --output dist --name @diegofrayo/validator --watch --no-compress",
+    "build": "microbundle --entry src/index.js --output dist --name @diegofrayo/validator"
   },
   "files": [
     "dist/*.js",
@@ -55,7 +55,7 @@
     }
   },
   "lint-staged": {
-    "*.{js,jsx}": [
+    "src/*.js": [
       "prettier --write",
       "eslint",
       "git add"

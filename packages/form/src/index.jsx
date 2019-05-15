@@ -56,7 +56,9 @@ class Form extends React.Component {
         return { values, ...this.validateForm(values, { ...prevState.errors }) };
       });
     } else {
-      this.setState({ values, ...this.initializeInputsState(values) });
+      const { inputsState, status } = this.initializeInputsState(values);
+      this.setState({ values, status });
+      this.inputsState = inputsState;
     }
   }
 
@@ -231,7 +233,11 @@ class Form extends React.Component {
   validateInput = ({ inputName, inputConfig, values, updateState }) => {
     let isValid = this.getHandler(inputConfig, 'isValid')(values[inputName], values);
 
-    isValid = !(inputConfig.required === true && isValid === false);
+    isValid =
+      !(inputConfig.required === true && isValid === false) ||
+      (inputConfig.required === false &&
+        values[inputName] !== undefined &&
+        isValid === true);
 
     if (updateState) {
       this.setState(

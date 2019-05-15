@@ -60,7 +60,7 @@ module.exports = {
           'lifecycle',
           'everything-else',
           '/^on.+$/',
-          'render',
+          'rendering',
         ],
         groups: {
           rendering: ['/^render.+$/', 'render'],

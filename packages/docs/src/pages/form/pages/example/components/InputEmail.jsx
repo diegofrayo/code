@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Form from '@diegofrayo/form';
-import Validator from '@diegofrayo/validator';
+import { validate } from '@diegofrayo/validator';
 import { Box, Loader } from '@diegofrayo/components';
 import { Input } from '@diegofrayo/components/styled';
 import { styled } from '@diegofrayo/styles';
@@ -46,7 +46,7 @@ class InputEmail extends React.Component {
   blurCounter = 1;
 
   validate = inputValue => {
-    return Validator(inputValue)
+    return validate(inputValue)
       .email()
       .allowEmpty()
       .exec();
