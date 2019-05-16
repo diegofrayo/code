@@ -65,8 +65,8 @@ import onSubmit from './onSubmit.js';
               name="email"
               value={values.email}
               updaters={updaters}
-              required={formConfig.email.required}
               htmlAttrs={formConfig.email.htmlAttrs}
+              inputConfig={formConfig.email}
             />
             <Input.Error>{errors.email}</Input.Error>
           </FormGroup>

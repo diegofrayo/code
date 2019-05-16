@@ -41,7 +41,7 @@
     "lint-staged": "^8.1.5",
     "microbundle": "^0.11.0",
     "prettier": "^1.16.4",
-    "react-testing-library": "^6.1.2",
+    "react-testing-library": "^7.0.0",
     "regenerator-runtime": "^0.13.2"
   },
   "peerDependencies": {
@@ -49,7 +49,7 @@
     "react": "^16.8.4"
   },
   "scripts": {
-    "lint": "eslint -c eslintrc.json 'src/index.jsx'",
+    "lint": "eslint -c eslintrc.json 'src/*'",
     "lint:tests": "eslint -c eslintrc-test.json 'test/**/*.{js,jsx}'",
     "prepublish": "yarn build",
     "test": "jest test/*.spec.{jsx,js}",

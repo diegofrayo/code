@@ -12,9 +12,17 @@ class CustomInputPassword extends React.Component {
     updateInputValue(name, value);
 
     if (!isValid) {
-      updateErrorMessage(name, inputConfig.errorMessage);
+      updateErrorMessage({
+        inputName: name,
+        inputConfig,
+        errorMessage: inputConfig.errorMessage,
+      });
     } else {
-      updateErrorMessage(name);
+      updateErrorMessage({
+        inputName: name,
+        inputConfig,
+        errorMessage: null,
+      });
     }
   };
 

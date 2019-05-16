@@ -54,16 +54,16 @@ class InputEmail extends React.Component {
 
   onBlur = event => {
     const {
-      required,
-      updaters: { updateErrorMessage, updateStatus },
+      inputConfig,
+      updaters: { updateErrorMessage, updateFormStatus },
     } = this.props;
     const { name, value } = event.currentTarget;
     const isValid = this.validate(value);
 
     if (!isValid) return;
 
-    if (required) {
-      updateStatus(Form.STATUS.INVALID);
+    if (inputConfig.required) {
+      updateFormStatus(Form.STATUS.INVALID);
     }
 
     this.setState({ isLoading: true });
@@ -72,9 +72,13 @@ class InputEmail extends React.Component {
       this.blurCounter += 1;
 
       if (this.blurCounter % 2 === 0) {
-        updateErrorMessage(name);
+        updateErrorMessage({ inputName: name, inputConfig, errorMessage: null });
       } else {
-        updateErrorMessage(name, 'This email is used by other account');
+        updateErrorMessage({
+          inputName: name,
+          inputConfig,
+          errorMessage: 'This email is used by other account',
+        });
       }
 
       this.setState({ isLoading: false });
@@ -83,6 +87,7 @@ class InputEmail extends React.Component {
 
   onChange = event => {
     const {
+      inputConfig,
       updaters: { updateErrorMessage, updateInputValue },
     } = this.props;
     const { name, value } = event.currentTarget;
@@ -91,9 +96,13 @@ class InputEmail extends React.Component {
     updateInputValue(name, value);
 
     if (!isValid) {
-      updateErrorMessage(name, 'Type a valid email.');
+      updateErrorMessage({
+        inputName: name,
+        inputConfig,
+        errorMessage: 'Type a valid email',
+      });
     } else {
-      updateErrorMessage(name);
+      updateErrorMessage({ inputName: name, inputConfig, errorMessage: null });
     }
   };
 
@@ -114,12 +123,8 @@ class InputEmail extends React.Component {
 
 InputEmail.propTypes = {
   updaters: PropTypes.object.isRequired,
-
-  required: PropTypes.bool,
 };
 
-InputEmail.defaultProps = {
-  required: false,
-};
+InputEmail.defaultProps = {};
 
 export default InputEmail;
