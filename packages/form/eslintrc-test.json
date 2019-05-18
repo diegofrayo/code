@@ -1,10 +1,10 @@
 {
   "extends": ["@diegofrayo/eslint-config"],
   "globals": {
-    "test": true,
     "describe": true,
     "expect": true,
-    "jest": true
+    "jest": true,
+    "test": true
   },
   "rules": {
     "react/prop-types": 0

@@ -9,13 +9,13 @@ import {
   onSubmit,
   updaterErrorMessage,
   validateForm,
-} from './utils';
+} from './service';
 import useForm from './state';
 
 const Form = function Form({
   children,
   config: formConfig,
-  defaultValues: formDefaultValues,
+  defaultValues,
   onSubmit: onSubmitCallback,
   submitResponseMessages,
   validateAtDidMount,
@@ -24,45 +24,43 @@ const Form = function Form({
     state: { formErrors, formStatus, formValues, inputsState, submitResponse },
 
     resetSubmitResponse,
+    setInputsState,
+    setLoadingFormStatus,
+    setFailureSubmitResponse,
+    setSuccessSubmitResponse,
     updateErrorMessage,
-    updateFormErrors,
     updateFormStatus,
     updateFormValues,
-    updateInputsState,
     updateInputState,
     updateInputValue,
-    updateSubmitResponse,
+    updateStateAtDidMount,
   } = useForm();
 
   // componentDidMount
   React.useEffect(() => {
-    const formValuesResult = createFormDefaultValues({ formDefaultValues, formConfig });
+    const formDefaultValues = createFormDefaultValues(defaultValues, formConfig);
 
     if (validateAtDidMount) {
-      const { formStatus: formStatusResult, formErrors: formErrorsResult } = validateForm(
-        {
-          formConfig,
-          formValues: formValuesResult,
-          formErrors,
-        },
-      );
-
-      updateFormErrors(formErrorsResult);
-      updateFormStatus(formStatusResult);
-    } else {
       const {
-        inputsState: inputsStateResult,
-        formStatus: formStatusResult,
-      } = initializeInputsState({
-        formValues: formValuesResult,
+        formErrors: formErrorsResulting,
+        formStatus: formStatusResulting,
+      } = validateForm({
         formConfig,
+        formErrors,
+        formValues: formDefaultValues,
       });
 
-      updateFormStatus(formStatusResult);
-      updateInputsState(inputsStateResult);
+      updateStateAtDidMount(formStatusResulting, formErrorsResulting);
+    } else {
+      const {
+        formStatus: formStatusResulting,
+        inputsState: inputsStateResulting,
+      } = initializeInputsState(formDefaultValues, formConfig);
+
+      setInputsState(formStatusResulting, inputsStateResulting);
     }
 
-    updateFormValues(formValuesResult);
+    updateFormValues(formDefaultValues);
   }, []);
 
   if (!formValues) return null;
@@ -72,21 +70,23 @@ const Form = function Form({
       {children({
         errors: formErrors,
         onInputChange: onInputChange({
-          inputsState,
           formConfig,
           formValues,
+          inputsState,
+
           updateErrorMessage,
           updateFormStatus,
           updateInputState,
           updateInputValue,
         }),
         onSubmit: onSubmit({
-          formStatus,
           formConfig,
+          formStatus,
           formValues,
-          resetSubmitResponse,
-          updateFormStatus,
-          updateSubmitResponse,
+
+          setLoadingFormStatus,
+          setFailureSubmitResponse,
+          setSuccessSubmitResponse,
 
           onSubmitCallback,
           submitResponseMessages,
@@ -97,6 +97,7 @@ const Form = function Form({
         updaters: {
           updateErrorMessage: updaterErrorMessage({
             inputsState,
+
             updateErrorMessage,
             updateFormStatus,
             updateInputState,

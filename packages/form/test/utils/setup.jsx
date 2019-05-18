@@ -17,6 +17,8 @@ const sleep = tm => {
   });
 };
 
+jest.setTimeout(10000);
+
 export * from 'react-testing-library';
 
 export { customRender as render, sleep };

@@ -1,3 +1,4 @@
 {
-  "extends": ["@diegofrayo/eslint-config"]
+  "extends": ["@diegofrayo/eslint-config"],
+  "plugins": ["react-hooks"]
 }

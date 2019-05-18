@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { FORM_STATUS, FORM_SUBMIT_RESPONSE_TYPES } from './constants';
+import { keyMirror } from './utils';
 
 const INITIAL_STATE = {
   formErrors: {},
@@ -14,22 +15,60 @@ const INITIAL_STATE = {
   },
 };
 
-const ACTIONS = {
-  RESET_SUBMIT_RESPONSE: 'RESET_SUBMIT_RESPONSE',
-  UPDATE_ERROR_MESSAGE: 'UPDATE_ERROR_MESSAGE',
-  UPDATE_FORM_ERRORS: 'UPDATE_FORM_ERRORS',
-  UPDATE_FORM_STATUS: 'UPDATE_FORM_STATUS',
-  UPDATE_FORM_VALUES: 'UPDATE_FORM_VALUES',
-  UPDATE_INPUT_STATE: 'UPDATE_INPUT_STATE',
-  UPDATE_INPUT_VALUE: 'UPDATE_INPUT_VALUE',
-  UPDATE_INPUTS_STATE: 'UPDATE_INPUTS_STATE',
-  UPDATE_SUBMIT_RESPONSE: 'UPDATE_SUBMIT_RESPONSE',
-};
+const ACTIONS = keyMirror({
+  RESET_SUBMIT_RESPONSE: 0,
+  SET_LOADING_FORM_STATUS: 0,
+  SET_FAILURE_SUBMIT_RESPONSE: 0,
+  SET_SUCCESS_SUBMIT_RESPONSE: 0,
+  SET_INPUTS_STATE: 0,
+  UPDATE_ERROR_MESSAGE: 0,
+  UPDATE_FORM_STATUS: 0,
+  UPDATE_FORM_VALUES: 0,
+  UPDATE_INPUT_STATE: 0,
+  UPDATE_INPUT_VALUE: 0,
+  UPDATE_STATE_AT_DIDMOUNT: 0,
+});
 
 const reducer = (state, action) => {
   switch (action.type) {
     case ACTIONS.RESET_SUBMIT_RESPONSE:
       return { ...state, submitResponse: INITIAL_STATE.submitResponse };
+
+    case ACTIONS.SET_LOADING_FORM_STATUS:
+      return {
+        ...state,
+        formStatus: FORM_STATUS.LOADING,
+        submitResponse: INITIAL_STATE.submitResponse,
+      };
+
+    case ACTIONS.SET_SUCCESS_SUBMIT_RESPONSE:
+      return {
+        ...state,
+        formStatus: FORM_STATUS.VALID,
+        submitResponse: {
+          show: true,
+          type: FORM_SUBMIT_RESPONSE_TYPES.SUCCESS,
+          message: action.payload.message,
+        },
+      };
+
+    case ACTIONS.SET_FAILURE_SUBMIT_RESPONSE:
+      return {
+        ...state,
+        formStatus: FORM_STATUS.VALID,
+        submitResponse: {
+          show: true,
+          type: FORM_SUBMIT_RESPONSE_TYPES.FAILURE,
+          message: action.payload.message,
+        },
+      };
+
+    case ACTIONS.SET_INPUTS_STATE:
+      return {
+        ...state,
+        formStatus: action.payload.formStatus,
+        inputsState: action.payload.inputsState,
+      };
 
     case ACTIONS.UPDATE_ERROR_MESSAGE:
       return {
@@ -46,9 +85,6 @@ const reducer = (state, action) => {
           return formErrorsUpdated;
         })(state.formErrors),
       };
-
-    case ACTIONS.UPDATE_FORM_ERRORS:
-      return { ...state, formErrors: action.payload.formErrors };
 
     case ACTIONS.UPDATE_FORM_STATUS:
       return { ...state, formStatus: action.payload.formStatus };
@@ -74,11 +110,12 @@ const reducer = (state, action) => {
         },
       };
 
-    case ACTIONS.UPDATE_INPUTS_STATE:
-      return { ...state, inputsState: action.payload.inputsState };
-
-    case ACTIONS.UPDATE_SUBMIT_RESPONSE:
-      return { ...state, submitResponse: action.payload.submitResponse };
+    case ACTIONS.UPDATE_STATE_AT_DIDMOUNT:
+      return {
+        ...state,
+        formStatus: action.payload.formStatus,
+        formErrors: action.payload.formErrors,
+      };
 
     default:
       throw new Error(`Invalid action: ${action.type}`);
@@ -92,15 +129,27 @@ const useForm = () => {
     dispatch({ type: ACTIONS.RESET_SUBMIT_RESPONSE });
   };
 
+  const setInputsState = (formStatus, inputsState) => {
+    dispatch({ type: ACTIONS.SET_INPUTS_STATE, payload: { formStatus, inputsState } });
+  };
+
+  const setLoadingFormStatus = () => {
+    dispatch({ type: ACTIONS.SET_LOADING_FORM_STATUS });
+  };
+
+  const setFailureSubmitResponse = message => {
+    dispatch({ type: ACTIONS.SET_FAILURE_SUBMIT_RESPONSE, payload: { message } });
+  };
+
+  const setSuccessSubmitResponse = message => {
+    dispatch({ type: ACTIONS.SET_SUCCESS_SUBMIT_RESPONSE, payload: { message } });
+  };
+
   const updateErrorMessage = (inputName, errorMessage) => {
     dispatch({
       type: ACTIONS.UPDATE_ERROR_MESSAGE,
       payload: { inputName, errorMessage },
     });
-  };
-
-  const updateFormErrors = formErrors => {
-    dispatch({ type: ACTIONS.UPDATE_FORM_ERRORS, payload: { formErrors } });
   };
 
   const updateFormStatus = formStatus => {
@@ -111,10 +160,6 @@ const useForm = () => {
     dispatch({ type: ACTIONS.UPDATE_FORM_VALUES, payload: { formValues } });
   };
 
-  const updateInputsState = inputsState => {
-    dispatch({ type: ACTIONS.UPDATE_INPUTS_STATE, payload: { inputsState } });
-  };
-
   const updateInputState = (inputName, inputState) => {
     dispatch({ type: ACTIONS.UPDATE_INPUT_STATE, payload: { inputName, inputState } });
   };
@@ -123,22 +168,27 @@ const useForm = () => {
     dispatch({ type: ACTIONS.UPDATE_INPUT_VALUE, payload: { inputName, inputValue } });
   };
 
-  const updateSubmitResponse = submitResponse => {
-    dispatch({ type: ACTIONS.UPDATE_SUBMIT_RESPONSE, payload: { submitResponse } });
+  const updateStateAtDidMount = (formStatus, formErrors) => {
+    dispatch({
+      type: ACTIONS.UPDATE_STATE_AT_DIDMOUNT,
+      payload: { formStatus, formErrors },
+    });
   };
 
   return {
     state,
 
     resetSubmitResponse,
+    setFailureSubmitResponse,
+    setInputsState,
+    setLoadingFormStatus,
+    setSuccessSubmitResponse,
     updateErrorMessage,
-    updateFormErrors,
     updateFormStatus,
     updateFormValues,
-    updateInputsState,
     updateInputState,
     updateInputValue,
-    updateSubmitResponse,
+    updateStateAtDidMount,
   };
 };
 

@@ -4,7 +4,7 @@ import 'jest-dom/extend-expect';
 import React from 'react';
 
 // eslint-disable-next-line
-import { fireEvent, render, waitForElement, wait } from './utils/setup';
+import { fireEvent, render, sleep, waitForElement, wait } from './utils/setup';
 
 import Form from './components/Form';
 import formConfig from './components/formConfig';
@@ -30,8 +30,11 @@ describe('Form Component', () => {
 
     const inputEmail = await findByTestId('input-email');
     const inputPassword = await findByTestId('input-password');
+    const inputBio = await findByTestId('input-bio');
     const buttonSubmit = await findByTestId('button-submit');
     const getContainerSubmitResponse = () => queryByTestId('submit-response');
+
+    expect(buttonSubmit.disabled).toBe(true);
 
     // Test defaultValues (email and birthDate)
     expect(inputEmail).toHaveAttribute('value', DEFAULT_VALUES.email);
@@ -72,6 +75,31 @@ describe('Form Component', () => {
 
     expect(buttonSubmit.disabled).toBe(false);
     expect(await getContainerSubmitResponse()).not.toBeInTheDocument();
+
+    // Test form status
+    fireEvent.change(inputEmail, {
+      target: { value: 'newemail@gmail.com' },
+    });
+    fireEvent.change(inputPassword, {
+      target: { value: '0' },
+    });
+    fireEvent.change(inputBio, {
+      target: { value: 'something' },
+    });
+    expect(buttonSubmit.disabled).toBe(true);
+
+    fireEvent.change(inputEmail, {
+      target: { value: 'anotheremail@gmail.com' },
+    });
+    expect(buttonSubmit.disabled).toBe(true);
+
+    fireEvent.change(inputEmail, {
+      target: { value: DEFAULT_VALUES.email },
+    });
+    fireEvent.change(inputPassword, {
+      target: { value: 'validpassword' },
+    });
+    expect(buttonSubmit.disabled).toBe(false);
 
     // Test submit behaviour
     fireEvent.click(buttonSubmit);
