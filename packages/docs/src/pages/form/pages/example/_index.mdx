@@ -37,12 +37,12 @@ import onSubmit from './onSubmit.js';
 
 <Playground>
   <Form
-    defaultValues={{ email: 'test@gmail.com', birthDate: '2019-04-19' }}
+    defaultValues={{ email: 'invalid-email', birthDate: '2019-04-19' }}
     config={formConfig}
     onSubmit={onSubmit}
     submitResponseMessages={{
       failure: res => res.data.message,
-      success: 'Sign up successful',
+      success: 'Sign up successful (It is just a random example)',
     }}
   >
     {({
@@ -54,6 +54,7 @@ import onSubmit from './onSubmit.js';
       submitResponse,
       updaters,
       values,
+      validateAtDidMount
     }) => {
       return (
         <Container>

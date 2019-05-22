@@ -77,8 +77,5 @@
       "eslint",
       "git add"
     ]
-  },
-  "dependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.4.4"
   }
 }

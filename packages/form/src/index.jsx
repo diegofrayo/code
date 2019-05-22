@@ -2,15 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { FORM_STATUS, FORM_SUBMIT_RESPONSE_TYPES } from './constants';
-import {
-  createFormDefaultValues,
-  initializeInputsState,
-  onInputChange,
-  onSubmit,
-  updaterErrorMessage,
-  validateForm,
-} from './service';
+import FormService from './service';
 import useForm from './state';
+import { didMount } from './utils';
 
 const Form = function Form({
   children,
@@ -21,47 +15,77 @@ const Form = function Form({
   validateAtDidMount,
 }) {
   const {
-    state: { formErrors, formStatus, formValues, inputsState, submitResponse },
+    state: { formErrors, formInvalidInputs, formStatus, formValues, submitResponse },
 
     resetSubmitResponse,
-    setInputsState,
+    setFormErrors,
+    setFormInvalidInputs,
     setLoadingFormStatus,
     setFailureSubmitResponse,
     setSuccessSubmitResponse,
     updateErrorMessage,
     updateFormStatus,
     updateFormValues,
-    updateInputState,
     updateInputValue,
-    updateStateAtDidMount,
   } = useForm();
 
-  // componentDidMount
-  React.useEffect(() => {
-    const formDefaultValues = createFormDefaultValues(defaultValues, formConfig);
+  const formService = new FormService({
+    props: {
+      formConfig,
+      onSubmitCallback,
+      submitResponseMessages,
+      validateAtDidMount,
+    },
+    state: {
+      formErrors,
+      formInvalidInputs,
+      formStatus,
+      formValues,
+      submitResponse,
+    },
+    stateHandlers: {
+      resetSubmitResponse,
+      setFormErrors,
+      setFormInvalidInputs,
+      setLoadingFormStatus,
+      setFailureSubmitResponse,
+      setSuccessSubmitResponse,
+      updateErrorMessage,
+      updateFormStatus,
+      updateFormValues,
+      updateInputValue,
+    },
+  });
+
+  didMount(() => {
+    const formDefaultValues = formService.createFormDefaultValues(
+      defaultValues,
+      formConfig,
+    );
+    const {
+      formErrors: formErrorsOfInvalidInputs,
+      formInvalidInputs: formInvalidInputsResulting,
+    } = formService.getFormInvalidInputs(formConfig);
+
+    setFormErrors(formErrorsOfInvalidInputs);
+    setFormInvalidInputs(formInvalidInputsResulting);
+    updateFormValues(formDefaultValues);
 
     if (validateAtDidMount) {
       const {
         formErrors: formErrorsResulting,
         formStatus: formStatusResulting,
-      } = validateForm({
+      } = formService.validateForm({
         formConfig,
         formErrors,
+        formInvalidInputs,
         formValues: formDefaultValues,
       });
 
-      updateStateAtDidMount(formStatusResulting, formErrorsResulting);
-    } else {
-      const {
-        formStatus: formStatusResulting,
-        inputsState: inputsStateResulting,
-      } = initializeInputsState(formDefaultValues, formConfig);
-
-      setInputsState(formStatusResulting, inputsStateResulting);
+      setFormErrors(formErrorsResulting);
+      updateFormStatus(formStatusResulting);
     }
-
-    updateFormValues(formDefaultValues);
-  }, []);
+  });
 
   if (!formValues) return null;
 
@@ -69,43 +93,18 @@ const Form = function Form({
     <form>
       {children({
         errors: formErrors,
-        onInputChange: onInputChange({
-          formConfig,
-          formValues,
-          inputsState,
-
-          updateErrorMessage,
-          updateFormStatus,
-          updateInputState,
-          updateInputValue,
-        }),
-        onSubmit: onSubmit({
-          formConfig,
-          formStatus,
-          formValues,
-
-          setLoadingFormStatus,
-          setFailureSubmitResponse,
-          setSuccessSubmitResponse,
-
-          onSubmitCallback,
-          submitResponseMessages,
-        }),
+        onInputChange: formService.onInputChange,
+        onSubmit: formService.onSubmit,
         resetSubmitResponse,
         status: formStatus,
         submitResponse,
         updaters: {
-          updateErrorMessage: updaterErrorMessage({
-            inputsState,
-
-            updateErrorMessage,
-            updateFormStatus,
-            updateInputState,
-          }),
+          updateErrorMessage: formService.updateErrorMessage,
           updateFormStatus,
           updateInputValue,
         },
         values: formValues,
+        validateAtDidMount,
       })}
     </form>
   );

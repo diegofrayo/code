@@ -4,7 +4,7 @@ import 'jest-dom/extend-expect';
 import React from 'react';
 
 // eslint-disable-next-line
-import { fireEvent, render, sleep, waitForElement, wait } from './utils/setup';
+import { fireEvent, render, waitForElement, wait } from './utils/setup';
 
 import Form from './components/Form';
 import formConfig from './components/formConfig';
@@ -12,19 +12,20 @@ import formConfig from './components/formConfig';
 describe('Form Component', () => {
   test('create and submit form', async () => {
     const DEFAULT_VALUES = { email: 'diegofrayo@gmail.com', birthDate: '2019-04-19' };
+    const PASSWORD_ERROR_MESSAGE = 'Custom input password error message';
     const onSubmitMock = jest.fn();
 
     const {
       findByTestId,
-      queryByLabelText,
       findByText,
-      queryByText,
+      queryByLabelText,
       queryByTestId,
+      queryByText,
     } = render(
       <Form
-        onSubmit={onSubmitMock}
         defaultValues={DEFAULT_VALUES}
         formConfig={formConfig}
+        onSubmit={onSubmitMock}
       />,
     );
 
@@ -34,7 +35,7 @@ describe('Form Component', () => {
     const buttonSubmit = await findByTestId('button-submit');
     const getContainerSubmitResponse = () => queryByTestId('submit-response');
 
-    expect(buttonSubmit.disabled).toBe(true);
+    expect(buttonSubmit.disabled).toBe(false);
 
     // Test defaultValues (email and birthDate)
     expect(inputEmail).toHaveAttribute('value', DEFAULT_VALUES.email);
@@ -58,21 +59,20 @@ describe('Form Component', () => {
       target: { value: DEFAULT_VALUES.email },
     });
     expect(await queryByText(formConfig.email.errorMessage)).not.toBeInTheDocument();
-
-    expect(buttonSubmit.disabled).toBe(true);
+    expect(buttonSubmit.disabled).toBe(false);
 
     // Test password error message
     fireEvent.change(inputPassword, {
       target: { value: '123' },
     });
-    expect(await findByText(formConfig.password.errorMessage)).toBeInTheDocument();
+    expect(await findByText(PASSWORD_ERROR_MESSAGE)).toBeInTheDocument();
+    expect(buttonSubmit.disabled).toBe(true);
 
     // Test password error message
     fireEvent.change(inputPassword, {
       target: { value: 'MyPass123' },
     });
-    expect(await queryByText(formConfig.password.errorMessage)).not.toBeInTheDocument();
-
+    expect(await queryByText(PASSWORD_ERROR_MESSAGE)).not.toBeInTheDocument();
     expect(buttonSubmit.disabled).toBe(false);
     expect(await getContainerSubmitResponse()).not.toBeInTheDocument();
 
@@ -84,7 +84,7 @@ describe('Form Component', () => {
       target: { value: '0' },
     });
     fireEvent.change(inputBio, {
-      target: { value: 'something' },
+      target: { value: 'good' },
     });
     expect(buttonSubmit.disabled).toBe(true);
 
@@ -98,6 +98,16 @@ describe('Form Component', () => {
     });
     fireEvent.change(inputPassword, {
       target: { value: 'validpassword' },
+    });
+    expect(buttonSubmit.disabled).toBe(false);
+
+    fireEvent.change(inputBio, {
+      target: { value: '1' },
+    });
+    expect(buttonSubmit.disabled).toBe(true);
+
+    fireEvent.change(inputBio, {
+      target: { value: 'can be empty or more two characters' },
     });
     expect(buttonSubmit.disabled).toBe(false);
 
@@ -125,8 +135,9 @@ describe('Form Component', () => {
 
   test(`test 'validateAtDidMount' prop`, async () => {
     const DEFAULT_VALUES = {
-      email: 'diegofrayo@gmail.com',
+      email: '',
       password: '12345',
+      bio: '1',
       birthDate: '2019-04-19',
     };
 
@@ -134,6 +145,6 @@ describe('Form Component', () => {
       <Form defaultValues={DEFAULT_VALUES} formConfig={formConfig} validateAtDidMount />,
     );
 
-    expect((await findByTestId('button-submit')).disabled).toBe(false);
+    expect((await findByTestId('button-submit')).disabled).toBe(true);
   });
 });

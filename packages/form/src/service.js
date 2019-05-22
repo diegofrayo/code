@@ -1,288 +1,351 @@
 import { FORM_STATUS } from './constants';
 
-const createInputDefaultValue = type => {
-  if (type === 'number') {
-    return 1;
+export default class FormService {
+  constructor({ props, state, stateHandlers }) {
+    this.props = props;
+    this.state = state;
+    this.stateHandlers = stateHandlers;
   }
 
-  if (type === 'bool') {
-    return false;
-  }
+  createFormDefaultValues = (formDefaultValues, formConfig) => {
+    const formValues = {
+      ...Object.entries(formConfig).reduce((result, [inputName, inputConfig]) => {
+        if (inputConfig.defaultValue !== undefined) {
+          // eslint-disable-next-line
+          result[inputName] = inputConfig.defaultValue;
+        } else {
+          // eslint-disable-next-line
+          result[inputName] = this._createInputDefaultValue(inputConfig.type);
+        }
 
-  return '';
-};
+        return result;
+      }, {}),
+      ...formDefaultValues,
+    };
 
-const executeInputHandler = ({ handlerName, inputConfig, inputValue, formValues }) => {
-  if (inputConfig.handlers && typeof inputConfig.handlers[handlerName] === 'function') {
-    return inputConfig.handlers[handlerName](inputValue, formValues);
-  }
-
-  if (handlerName === 'isValid') {
-    if (inputConfig.required === true && inputConfig.customValidation !== true) {
-      throw new Error('You must set isValid handler');
-    }
-
-    return true;
-  }
-
-  return inputValue;
-};
-
-const getSubmitResponseMessage = (submitResponseMessage, data) => {
-  if (typeof submitResponseMessage === 'function') {
-    return submitResponseMessage(data);
-  }
-
-  return submitResponseMessage;
-};
-
-const addErrorMessage = ({
-  inputName,
-  inputConfig,
-  errorMessage,
-  updateErrorMessage,
-  updateFormStatus,
-  updateInputState,
-}) => {
-  let finalErrorMessage;
-
-  if (errorMessage === null) {
-    finalErrorMessage = '';
-  } else if (typeof errorMessage === 'string') {
-    finalErrorMessage = errorMessage;
-  } else {
-    finalErrorMessage = inputConfig.errorMessage;
-  }
-
-  updateErrorMessage(inputName, finalErrorMessage);
-  updateFormStatus(FORM_STATUS.INVALID);
-
-  if (inputConfig.required) {
-    updateInputState(inputName, false);
-  }
-};
-
-const removeErrorMessage = ({
-  inputName,
-  inputConfig,
-  inputsState,
-  updateErrorMessage,
-  updateFormStatus,
-  updateInputState,
-}) => {
-  updateErrorMessage(inputName);
-
-  if (inputConfig.required) {
-    let invalidInputs = Object.values(inputsState).filter(inputState => !inputState)
-      .length;
-    invalidInputs -= inputsState[inputName] === false ? 1 : 0;
-    const status = invalidInputs > 0 ? FORM_STATUS.INVALID : FORM_STATUS.VALID;
-    updateFormStatus(status);
-    updateInputState(inputName, true);
-  }
-};
-
-const validateInput = ({ inputName, inputConfig, inputValue, formValues }) => {
-  let isValid = executeInputHandler({
-    handlerName: 'isValid',
-    inputConfig,
-    inputValue,
-    formValues,
-  });
-
-  isValid =
-    !(inputConfig.required === true && isValid === false) ||
-    (inputConfig.required === false &&
-      formValues[inputName] !== undefined &&
-      isValid === true);
-
-  return isValid;
-};
-
-export const createFormDefaultValues = (formDefaultValues, formConfig) => {
-  const values = {
-    ...Object.entries(formConfig).reduce((result, [inputName, inputConfig]) => {
-      if (inputConfig.defaultValue !== undefined) {
-        // eslint-disable-next-line
-        result[inputName] = inputConfig.defaultValue;
-      } else {
-        // eslint-disable-next-line
-        result[inputName] = createInputDefaultValue(inputConfig.type);
-      }
-
-      return result;
-    }, {}),
-    ...formDefaultValues,
+    return formValues;
   };
 
-  return values;
-};
+  getFormInvalidInputs = formConfig => {
+    const results = {
+      ...Object.entries(formConfig).reduce(
+        (result, [inputName, inputConfig]) => {
+          if (inputConfig.customValidation === true) {
+            // eslint-disable-next-line
+            result.formInvalidInputs[inputName] = true;
 
-export const initializeInputsState = (formValues, formConfig) => {
-  return Object.entries(formConfig).reduce(
-    (result, [inputName, inputConfig]) => {
-      if (inputConfig.required) {
-        const isInputValid = executeInputHandler({
-          handlerName: 'isValid',
+            // eslint-disable-next-line
+            result.formErrors[inputName] =
+              inputConfig.errorMessage || 'Type a valid value';
+          }
+
+          return result;
+        },
+        { formInvalidInputs: {}, formErrors: {} },
+      ),
+    };
+
+    return results;
+  };
+
+  validateForm = ({ formConfig, formValues, formErrors, formInvalidInputs }) => {
+    return Object.entries(formConfig).reduce(
+      (result, [inputName, inputConfig]) => {
+        const isValidInput = this._validateInput({
+          inputName,
           inputConfig,
           inputValue: formValues[inputName],
           formValues,
+          formInvalidInputs,
         });
 
-        if (isInputValid) {
-          result.inputsState[inputName] = true; // eslint-disable-line
+        if (isValidInput) {
+          delete result.formErrors[inputName]; // eslint-disable-line
         } else {
-          result.inputsState[inputName] = false; // eslint-disable-line
-          result.formStatus = FORM_STATUS.INVALID; // eslint-disable-line
+          // eslint-disable-next-line
+          result.formStatus = FORM_STATUS.INVALID;
+
+          // eslint-disable-next-line
+          result.formErrors[inputName] =
+            result.formErrors[inputName] || inputConfig.errorMessage;
         }
-      }
 
-      return result;
-    },
-    { inputsState: {}, formStatus: FORM_STATUS.VALID },
-  );
-};
+        return result;
+      },
+      { formStatus: FORM_STATUS.VALID, formErrors: { ...formErrors } },
+    );
+  };
 
-export const updaterErrorMessage = ({
-  inputsState,
-  updateErrorMessage,
-  updateFormStatus,
-  updateInputState,
-}) => ({ inputName, inputConfig, errorMessage }) => {
-  if (errorMessage) {
-    addErrorMessage({
-      inputName,
-      inputConfig,
-      errorMessage,
-      updateErrorMessage,
+  onSubmit = event => {
+    event.preventDefault();
+
+    const {
+      formConfig,
+      onSubmitCallback,
+      submitResponseMessages,
+      validateAtDidMount,
+    } = this.props;
+    const { formErrors, formInvalidInputs, formValues } = this.state;
+    const {
+      setFormErrors,
+      setLoadingFormStatus,
+      setFailureSubmitResponse,
+      setSuccessSubmitResponse,
       updateFormStatus,
-      updateInputState,
-    });
-  } else {
-    removeErrorMessage({
-      inputName,
-      inputConfig,
-      inputsState,
-      updateErrorMessage,
-      updateFormStatus,
-      updateInputState,
-    });
-  }
-};
+    } = this.stateHandlers;
 
-export const validateForm = ({ formConfig, formValues, formErrors }) => {
-  return Object.entries(formConfig).reduce(
-    (result, [inputName, inputConfig]) => {
-      const isInputValid = validateInput({
-        inputName,
-        inputConfig,
-        inputValue: formValues[inputName],
+    if (!validateAtDidMount && this._onSubmitFiredByFirstTime()) {
+      const {
+        formErrors: formErrorsResulting,
+        formStatus: formStatusResulting,
+      } = this.validateForm({
+        formConfig,
+        formErrors,
         formValues,
+        formInvalidInputs,
       });
 
-      if (isInputValid) {
-        delete result.formErrors[inputName]; // eslint-disable-line
-      } else {
-        result.formStatus = FORM_STATUS.INVALID; // eslint-disable-line
-        result.formErrors[inputName] = inputConfig.errorMessage; // eslint-disable-line
+      if (formStatusResulting === FORM_STATUS.INVALID) {
+        setFormErrors(formErrorsResulting);
+        updateFormStatus(formStatusResulting);
+
+        return null;
       }
+    }
 
-      return result;
-    },
-    { formStatus: FORM_STATUS.VALID, formErrors: { ...formErrors } },
-  );
-};
+    const transformedValues = Object.entries(formConfig).reduce(
+      (result, [inputName, inputConfig]) => {
+        // eslint-disable-next-line
+        result[inputName] = this._executeInputHandler({
+          handlerName: 'transformBeforeSubmit',
+          inputName,
+          inputConfig,
+          inputValue: formValues[inputName],
+        });
 
-export const onInputChange = ({
-  inputsState,
-  formConfig,
-  formValues,
-  updateErrorMessage,
-  updateFormStatus,
-  updateInputState,
-  updateInputValue,
-}) => data => {
-  const { name: inputName, value } = data.currentTarget ? data.currentTarget : data;
+        return result;
+      },
+      {},
+    );
 
-  const inputConfig = formConfig[inputName];
-  const transformedValue = executeInputHandler({
-    handlerName: 'transformBeforeSave',
-    inputName,
+    setLoadingFormStatus();
+
+    return onSubmitCallback(transformedValues)
+      .then(res => {
+        setSuccessSubmitResponse(
+          this._getSubmitResponseMessage(submitResponseMessages.success, res),
+        );
+      })
+      .catch(e => {
+        setFailureSubmitResponse(
+          this._getSubmitResponseMessage(submitResponseMessages.failure, e),
+        );
+      });
+  };
+
+  onInputChange = data => {
+    const { name: inputName, value: inputValue } = data.currentTarget
+      ? data.currentTarget
+      : data;
+
+    const { formConfig } = this.props;
+    const { formInvalidInputs, formValues } = this.state;
+    const { updateErrorMessage, updateFormStatus, updateInputValue } = this.stateHandlers;
+
+    const inputConfig = formConfig[inputName];
+    const transformedValue = this._executeInputHandler({
+      handlerName: 'transformBeforeSave',
+      inputName,
+      inputConfig,
+      inputValue,
+    });
+
+    updateInputValue(inputName, transformedValue);
+
+    const isValidInput = this._validateInput({
+      inputConfig,
+      inputName,
+      inputValue: transformedValue,
+      formValues,
+      formInvalidInputs,
+    });
+
+    this._updateErrorMessage({
+      addErrorMessageIf: isValidInput === false,
+      inputConfig,
+      inputName,
+      formInvalidInputs,
+      updateErrorMessage,
+      updateFormStatus,
+    });
+  };
+
+  updateErrorMessage = ({ inputConfig, inputName, errorMessage }) => {
+    const { formInvalidInputs } = this.state;
+    const { updateErrorMessage, updateFormStatus } = this.stateHandlers;
+
+    this._updateErrorMessage({
+      addErrorMessageIf: typeof errorMessage === 'string',
+      errorMessage,
+      inputConfig,
+      inputName,
+      formInvalidInputs,
+      updateErrorMessage,
+      updateFormStatus,
+    });
+  };
+
+  _validateInput = ({
     inputConfig,
-    inputValue: value,
-  });
-
-  updateInputValue(inputName, transformedValue);
-
-  const isInputValid = validateInput({
-    inputConfig,
-    inputName,
-    inputValue: transformedValue,
+    inputValue,
     formValues,
-  });
-
-  if (isInputValid) {
-    removeErrorMessage({
-      inputName,
+    formInvalidInputs,
+    inputName,
+  }) => {
+    const isValidInput = this._executeInputHandler({
+      handlerName: 'isValid',
       inputConfig,
-      inputsState,
-      updateErrorMessage,
-      updateFormStatus,
-      updateInputState,
+      inputValue,
+      formValues,
+      isInputValid: formInvalidInputs[inputName] === undefined,
     });
-  } else {
-    addErrorMessage({
-      inputName,
-      inputConfig,
-      updateErrorMessage,
-      updateFormStatus,
-      updateInputState,
-    });
-  }
-};
 
-export const onSubmit = ({
-  formStatus,
-  formConfig,
-  formValues,
+    return isValidInput;
+  };
 
-  setLoadingFormStatus,
-  setFailureSubmitResponse,
-  setSuccessSubmitResponse,
+  _updateErrorMessage = ({
+    addErrorMessageIf: addErrorMessage,
+    errorMessage,
+    inputConfig,
+    inputName,
 
-  onSubmitCallback,
-  submitResponseMessages,
-}) => event => {
-  event.preventDefault();
+    formInvalidInputs,
 
-  if (formStatus === FORM_STATUS.INVALID) return null;
-
-  const transformedValues = Object.entries(formConfig).reduce(
-    (result, [inputName, inputConfig]) => {
-      // eslint-disable-next-line
-      result[inputName] = executeInputHandler({
-        handlerName: 'transformBeforeSubmit',
+    updateErrorMessage,
+    updateFormStatus,
+  }) => {
+    if (addErrorMessage) {
+      this._addErrorMessage({
+        errorMessage,
         inputName,
         inputConfig,
-        inputValue: formValues[inputName],
+        updateErrorMessage,
+        updateFormStatus,
       });
+    } else {
+      this._removeErrorMessage({
+        inputName,
+        formInvalidInputs,
+        updateErrorMessage,
+        updateFormStatus,
+      });
+    }
+  };
 
-      return result;
-    },
-    {},
-  );
+  _addErrorMessage = ({
+    errorMessage,
+    inputName,
+    inputConfig,
+    updateErrorMessage,
+    updateFormStatus,
+  }) => {
+    let finalErrorMessage;
 
-  setLoadingFormStatus();
+    if (errorMessage === null) {
+      finalErrorMessage = '';
+    } else if (typeof errorMessage === 'string') {
+      finalErrorMessage = errorMessage;
+    } else {
+      finalErrorMessage = inputConfig.errorMessage;
+    }
 
-  return onSubmitCallback(transformedValues)
-    .then(res => {
-      setSuccessSubmitResponse(
-        getSubmitResponseMessage(submitResponseMessages.success, res),
-      );
-    })
-    .catch(e => {
-      setFailureSubmitResponse(
-        getSubmitResponseMessage(submitResponseMessages.failure, e),
-      );
-    });
-};
+    updateErrorMessage(inputName, finalErrorMessage);
+    updateFormStatus(FORM_STATUS.INVALID);
+  };
+
+  _removeErrorMessage = ({
+    inputName,
+    formInvalidInputs,
+    updateErrorMessage,
+    updateFormStatus,
+  }) => {
+    const numberOfInvalidInputs = this._getNumberOfInvalidInputs(
+      inputName,
+      formInvalidInputs,
+    );
+    const formStatus =
+      numberOfInvalidInputs > 0 ? FORM_STATUS.INVALID : FORM_STATUS.VALID;
+
+    updateErrorMessage(inputName, null);
+    updateFormStatus(formStatus);
+  };
+
+  _executeInputHandler = ({
+    handlerName,
+    inputConfig,
+    inputValue,
+    formValues,
+    isInputValid,
+  }) => {
+    // try to execute the handler if it exists
+    if (inputConfig.handlers && typeof inputConfig.handlers[handlerName] === 'function') {
+      return inputConfig.handlers[handlerName](inputValue, formValues);
+    }
+
+    // 'isValid handler not defined' scenarios
+    if (handlerName === 'isValid') {
+      if (inputConfig.customValidation !== true) {
+        throw new Error('You must set isValid handler');
+      }
+
+      return isInputValid;
+    }
+
+    // if the handler required is not defined
+    return inputValue;
+  };
+
+  _createInputDefaultValue = type => {
+    if (type === 'number') {
+      return 1;
+    }
+
+    if (type === 'bool') {
+      return false;
+    }
+
+    return '';
+  };
+
+  _getSubmitResponseMessage = (submitResponseMessage, data) => {
+    if (typeof submitResponseMessage === 'function') {
+      return submitResponseMessage(data);
+    }
+
+    return submitResponseMessage;
+  };
+
+  _isInvalidInput = isInvalid => {
+    return isInvalid === true;
+  };
+
+  _getNumberOfInvalidInputs = (inputName, formInvalidInputs) => {
+    let invalidInputs = Object.values(formInvalidInputs).filter(this._isInvalidInput)
+      .length;
+
+    if (this._isInvalidInput(formInvalidInputs[inputName])) {
+      invalidInputs -= 1;
+    }
+
+    return invalidInputs;
+  };
+
+  _onSubmitFiredByFirstTime = () => {
+    if (this.onSubmitFiredByFirstTime === undefined) {
+      this.onSubmitFiredByFirstTime = false;
+      return true;
+    }
+
+    return false;
+  };
+}

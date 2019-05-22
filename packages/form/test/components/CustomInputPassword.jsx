@@ -1,6 +1,8 @@
 import React from 'react';
 
 class CustomInputPassword extends React.Component {
+  errorMessage = 'Custom input password error message';
+
   onChange = event => {
     const {
       updaters: { updateErrorMessage, updateInputValue },
@@ -15,7 +17,7 @@ class CustomInputPassword extends React.Component {
       updateErrorMessage({
         inputName: name,
         inputConfig,
-        errorMessage: inputConfig.errorMessage,
+        errorMessage: this.errorMessage,
       });
     } else {
       updateErrorMessage({

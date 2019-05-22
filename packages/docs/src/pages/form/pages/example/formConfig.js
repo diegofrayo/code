@@ -5,6 +5,7 @@ export default {
     type: 'string',
     required: true,
     customValidation: true,
+    errorMessage: 'Please type a valid email',
     htmlAttrs: {
       id: 'input-email',
       placeholder: 'email@domain.co',
@@ -32,10 +33,19 @@ export default {
   bio: {
     type: 'string',
     required: false,
+    errorMessage: 'The bio must have at least two characters or leave it empty',
     htmlAttrs: {
       id: 'input-bio',
       placeholder: 'Bio',
       type: 'text',
+    },
+    handlers: {
+      isValid: value => {
+        return validate(value)
+          .minLength(2)
+          .allowEmpty()
+          .exec();
+      },
     },
   },
   birthDate: {

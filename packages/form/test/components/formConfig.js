@@ -23,6 +23,7 @@ export default {
     type: 'string',
     required: true,
     errorMessage: 'The password must have at least 5 characters',
+    customValidation: false,
     htmlAttrs: {
       id: 'input-password',
       placeholder: '',
@@ -41,6 +42,7 @@ export default {
   bio: {
     type: 'string',
     required: false,
+    errorMessage: 'The bio must have at least two characters or leave it empty',
     htmlAttrs: {
       id: 'input-bio',
       placeholder: 'Bio',
@@ -50,6 +52,8 @@ export default {
       isValid: value => {
         return validate(value)
           .string()
+          .minLength(2)
+          .allowEmpty()
           .exec();
       },
     },

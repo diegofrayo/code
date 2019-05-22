@@ -11,7 +11,7 @@ const onSubmit = values => {
         // eslint-disable-next-line
         return reject({
           error: true,
-          data: { message: 'Sign up failed', code: '001' },
+          data: { message: 'Sign up failed (It is just a random example)', code: '001' },
         });
       }
 

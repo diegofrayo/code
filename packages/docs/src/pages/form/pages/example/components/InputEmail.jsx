@@ -77,7 +77,8 @@ class InputEmail extends React.Component {
         updateErrorMessage({
           inputName: name,
           inputConfig,
-          errorMessage: 'This email is used by other account',
+          errorMessage:
+            'This email is used by other account (It is just a random example)',
         });
       }
 
@@ -99,7 +100,7 @@ class InputEmail extends React.Component {
       updateErrorMessage({
         inputName: name,
         inputConfig,
-        errorMessage: 'Type a valid email',
+        errorMessage: inputConfig.errorMessage,
       });
     } else {
       updateErrorMessage({ inputName: name, inputConfig, errorMessage: null });
