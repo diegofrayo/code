@@ -26,11 +26,11 @@
     "type": "git"
   },
   "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
     "@diegofrayo/validator": "1.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
-    "@babel/plugin-proposal-class-properties": "^7.4.4",
     "@babel/preset-env": "^7.4.3",
     "@babel/preset-react": "^7.0.0",
     "@diegofrayo/eslint-config": "1.0.0",
@@ -57,8 +57,8 @@
     "prepublish": "yarn build",
     "test": "jest test/*.spec.{jsx,js}",
     "upload": "npm publish --access public",
-    "dev": "microbundle --entry src/index.jsx --output dist --jsx React.createElement --name @diegofrayo/form --globals prop-types=PropTypes --no-compress --watch",
-    "build": "microbundle --entry src/index.jsx --output dist --jsx React.createElement --name @diegofrayo/form --globals prop-types=PropTypes"
+    "dev": "microbundle --entry src/index.jsx --output dist --jsx React.createElement --name @diegofrayo/form --globals prop-types=PropTypes @diegofrayo/validator=dfr_validator --no-compress --watch",
+    "build": "microbundle --entry src/index.jsx --output dist --jsx React.createElement --name @diegofrayo/form --globals prop-types=PropTypes @diegofrayo/validator=dfr_validator"
   },
   "files": [
     "dist/*.js",
