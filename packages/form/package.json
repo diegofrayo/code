@@ -5,7 +5,6 @@
   "license": "MIT",
   "main": "dist/form.js",
   "module": "dist/form.umd.js",
-  "unpkg": "dist/form.umd.js",
   "homepage": "https://github.com/diegofrayo/code/form#readme",
   "keywords": [
     "react form",
@@ -57,8 +56,8 @@
     "prepublish": "yarn build",
     "test": "jest test/*.spec.{jsx,js}",
     "upload": "npm publish --access public",
-    "dev": "microbundle --entry src/index.jsx --output dist --jsx React.createElement --name @diegofrayo/form --globals prop-types=PropTypes @diegofrayo/validator=dfr_validator --no-compress --watch",
-    "build": "microbundle --entry src/index.jsx --output dist --jsx React.createElement --name @diegofrayo/form --globals prop-types=PropTypes @diegofrayo/validator=dfr_validator"
+    "dev": "microbundle --entry src/index.jsx --output dist --jsx React.createElement --name @diegofrayo/form --globals prop-types=PropTypes, @diegofrayo/validator=dfr_validator --no-compress --watch",
+    "build": "microbundle --entry src/index.jsx --output dist --jsx React.createElement --name @diegofrayo/form --globals prop-types=PropTypes,@diegofrayo/validator=dfr_validator"
   },
   "files": [
     "dist/*.js",
