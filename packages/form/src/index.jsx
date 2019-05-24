@@ -58,6 +58,8 @@ const Form = function Form({
   });
 
   didMount(() => {
+    formService.validateFormConfig(formConfig);
+
     const formDefaultValues = formService.createFormDefaultValues(
       defaultValues,
       formConfig,

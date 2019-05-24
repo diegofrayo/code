@@ -124,6 +124,7 @@ class InputEmail extends React.Component {
 
 InputEmail.propTypes = {
   updaters: PropTypes.object.isRequired,
+  inputConfig: PropTypes.object.isRequired,
 };
 
 InputEmail.defaultProps = {};

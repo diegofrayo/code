@@ -66,9 +66,9 @@ export default {
 
 - \`errorMessage\`
     * **Type:** \`String\`
-    * **Required:** \`no\`
+    * **Required:** \`yes\`
     * **Description:** This message will be saved in \`errors\` object (See [#children](#children)) when the input value is invalid
-    * **Default value:** \`''\`
+    * **Default value:** \`'Wrong input value'\`
 
 - \`customValidation\`
     * **Type:** \`bool\`
@@ -78,7 +78,7 @@ export default {
 
 - \`handlers\`
     * **Type:** \`Object\`
-    * **Required:** If the input is required, \`isValid\` callback is required also, so this attribute will be required, else, no
+    * **Required:** If \`customValidation\` is not true, \`isValid\` callback is required, so this attribute will be required, else, no
     * **Description:** Contains some callbacks to validate and transform the input value
 
         - \`isValid(value, values)\`

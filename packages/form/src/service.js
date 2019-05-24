@@ -1,3 +1,11 @@
+import {
+  createObjectScheme,
+  formatErrorMessage,
+  Rule,
+  TypesValidator,
+  ValidationError,
+} from '@diegofrayo/validator';
+
 import { FORM_STATUS } from './constants';
 
 export default class FormService {
@@ -6,6 +14,60 @@ export default class FormService {
     this.state = state;
     this.stateHandlers = stateHandlers;
   }
+
+  validateFormConfig = formConfig => {
+    const customValidation = (inputConfig, opts) => handlers => {
+      if (
+        inputConfig.customValidation !== true &&
+        (!TypesValidator.isObject(handlers) ||
+          !TypesValidator.isFunction(handlers.isValid))
+      ) {
+        return {
+          isValid: false,
+          error: new ValidationError(
+            'customValidation',
+            'You must set isValid handler',
+            handlers,
+            `${opts.validatedPropertyName} => handlers`,
+          ),
+        };
+      }
+
+      return { isValid: true };
+    };
+
+    const inputConfigScheme = createObjectScheme({
+      type: new Rule().string().notAllowEmpty(),
+      errorMessage: new Rule().string().notAllowEmpty(),
+      handlers: new Rule().customValidation(customValidation),
+    });
+
+    const formConfigValidation = Object.entries(formConfig).reduce(
+      (result, [inputName, inputConfig]) => {
+        const inputConfigValidationResult = inputConfigScheme.validate(inputConfig, {
+          getErrors: true,
+          validatedPropertyName: inputName,
+        });
+
+        if (inputConfigValidationResult.isValid === false) {
+          // eslint-disable-next-line
+          result.isValid = false;
+
+          // eslint-disable-next-line
+          result.errors = result.errors.concat(inputConfigValidationResult.errors);
+        }
+
+        return result;
+      },
+      { isValid: true, errors: [] },
+    );
+
+    if (formConfigValidation.isValid === false) {
+      throw new Error(formatErrorMessage('formConfig', formConfigValidation.errors));
+    }
+
+    return true;
+  };
 
   createFormDefaultValues = (formDefaultValues, formConfig) => {
     const formValues = {
@@ -36,7 +98,7 @@ export default class FormService {
 
             // eslint-disable-next-line
             result.formErrors[inputName] =
-              inputConfig.errorMessage || 'Type a valid value';
+              inputConfig.errorMessage || 'Wrong input value';
           }
 
           return result;
@@ -292,12 +354,8 @@ export default class FormService {
       return inputConfig.handlers[handlerName](inputValue, formValues);
     }
 
-    // 'isValid handler not defined' scenarios
+    // if input has its own custom validation
     if (handlerName === 'isValid') {
-      if (inputConfig.customValidation !== true) {
-        throw new Error('You must set isValid handler');
-      }
-
       return isInputValid;
     }
 

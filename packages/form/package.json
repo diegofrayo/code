@@ -4,7 +4,7 @@
   "description": "React component to build and validate forms easily",
   "license": "MIT",
   "main": "dist/form.js",
-  "module": "dist/form.mjs",
+  "module": "dist/form.umd.js",
   "unpkg": "dist/form.umd.js",
   "homepage": "https://github.com/diegofrayo/code/form#readme",
   "keywords": [
@@ -25,12 +25,14 @@
     "url": "https://github.com/diegofrayo/code.git",
     "type": "git"
   },
+  "dependencies": {
+    "@diegofrayo/validator": "1.0.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.4.3",
     "@babel/preset-env": "^7.4.3",
     "@babel/preset-react": "^7.0.0",
     "@diegofrayo/eslint-config": "1.0.0",
-    "@diegofrayo/validator": "1.0.0",
     "babel-jest": "^24.7.1",
     "core-js": "3.0.1",
     "eslint": "latest",
