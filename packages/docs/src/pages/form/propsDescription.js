@@ -10,6 +10,9 @@ export default {
 
   defaultValues: `Form's inputs default values`,
 
+  onInputChangeParentHandler:
+    'This callback is executed when an input changes. It receives as parameters <code>Form</code> state object',
+
   validateAtDidMount:
     'Flag to set if the form must be validated when the component is being mounted or no',
 

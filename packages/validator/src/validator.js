@@ -1,258 +1,116 @@
-import TypesValidator from './types-validator';
-import { ValidationError } from './validation-error';
+import scheme from './scheme';
+import validate from './validate';
 
-const Validator = (value, isValid, errors, opts) => {
-  return {
-    array: () => {
-      const validationResult = isValid && TypesValidator.isArray(value);
+class ValidationStructure {
+  constructor() {
+    this.rules = [];
+  }
 
-      if (!validationResult) {
-        errors.push(
-          new ValidationError(
-            'array',
-            'Current value is not array',
-            value,
-            opts.validatedPropertyName,
-          ),
-        );
-      }
-
-      return Validator(value, validationResult, errors, opts);
-    },
-
-    boolean: () => {
-      const validationResult = isValid && TypesValidator.isBoolean(value);
-
-      if (!validationResult) {
-        errors.push(
-          new ValidationError(
-            'boolean',
-            'Current value is not boolean',
-            value,
-            opts.validatedPropertyName,
-          ),
-        );
-      }
-
-      return Validator(value, validationResult, errors, opts);
-    },
-
-    number: () => {
-      const validationResult = isValid && TypesValidator.isNumber(value);
-
-      if (!validationResult) {
-        errors.push(
-          new ValidationError(
-            'number',
-            'Current value is not number',
-            value,
-            opts.validatedPropertyName,
-          ),
-        );
-      }
-
-      return Validator(value, validationResult, errors, opts);
-    },
-
-    string: () => {
-      const validationResult = isValid && TypesValidator.isString(value);
-
-      if (!validationResult) {
-        errors.push(
-          new ValidationError(
-            'string',
-            'Current value is not string',
-            value,
-            opts.validatedPropertyName,
-          ),
-        );
-      }
-
-      return Validator(value, validationResult, errors, opts);
-    },
-
-    customValidation: customValidationCallback => {
-      const callbackResult = customValidationCallback(value);
-      const validationResult = isValid && callbackResult.isValid;
-
-      if (!validationResult) {
-        errors.push(callbackResult.error);
-      }
-
-      return Validator(value, validationResult, errors, opts);
-    },
-
-    email: () => {
-      const validationResult = isValid && TypesValidator.isEmail(value);
-
-      if (!validationResult) {
-        errors.push(
-          new ValidationError(
-            'email',
-            'Current value is not a valid email',
-            value,
-            opts.validatedPropertyName,
-          ),
-        );
-      }
-
-      return Validator(value, validationResult, errors, opts);
-    },
-
-    date: (pattern = 'yyyy-mm-dd') => {
-      const validationResult = isValid && TypesValidator.isDate(value, pattern);
-
-      if (!validationResult) {
-        errors.push(
-          new ValidationError(
-            'date',
-            'Current value is not a valid date',
-            value,
-            opts.validatedPropertyName,
-          ),
-        );
-      }
-
-      return Validator(value, validationResult, errors, opts);
-    },
-
-    regex: regex => {
-      const regexResult = regex.exec(value);
-      const validationResult =
-        isValid && regexResult !== null && regexResult[0] === regexResult.input;
-
-      if (!validationResult) {
-        errors.push(
-          new ValidationError(
-            'regex',
-            'Current value does not match with given regex',
-            value,
-            opts.validatedPropertyName,
-          ),
-        );
-      }
-
-      return Validator(value, validationResult, errors, opts);
-    },
-
-    min: min => {
-      const validationResult = isValid && value >= min;
-
-      if (!validationResult) {
-        errors.push(
-          new ValidationError(
-            'min',
-            `Current value must be greater or equal to ${min}`,
-            value,
-            opts.validatedPropertyName,
-          ),
-        );
-      }
-
-      return Validator(value, validationResult, errors, opts);
-    },
-
-    max: max => {
-      const validationResult = isValid && value <= max;
-
-      if (!validationResult) {
-        errors.push(
-          new ValidationError(
-            'max',
-            `Current value must be inferior or equal to ${max}`,
-            value,
-            opts.validatedPropertyName,
-          ),
-        );
-      }
-
-      return Validator(value, validationResult, errors, opts);
-    },
-
-    minLength: length => {
-      const validationResult = isValid && value.length >= length;
-
-      if (!validationResult) {
-        errors.push(
-          new ValidationError(
-            'minLength',
-            `Current value must have at least ${length} characters, but it has just ${
-              value.length
-            }`,
-            value,
-            opts.validatedPropertyName,
-          ),
-        );
-      }
-
-      return Validator(value, validationResult, errors, opts);
-    },
-
-    maxLength: length => {
-      const validationResult = isValid && value.length <= length;
-
-      if (!validationResult) {
-        errors.push(
-          new ValidationError(
-            'maxLength',
-            `Current value must have ${length} or less characters, but it has ${
-              value.length
-            }`,
-            value,
-            opts.validatedPropertyName,
-          ),
-        );
-      }
-
-      return Validator(value, validationResult, errors, opts);
-    },
-
-    allowEmpty: () => {
-      const validationResult = (isValid === false && value === '') || isValid === true;
-
-      if (!validationResult) {
-        errors.push(
-          new ValidationError('allowEmpty', '', value, opts.validatedPropertyName),
-        );
-      }
-
-      return Validator(value, validationResult, errors, opts);
-    },
-
-    notAllowEmpty: () => {
-      const validationResult = isValid && TypesValidator.isString(value) && value !== '';
-
-      if (!validationResult) {
-        errors.push(
-          new ValidationError(
-            'notAllowEmpty',
-            "Current value can't be empty",
-            value,
-            opts.validatedPropertyName,
-          ),
-        );
-      }
-
-      return Validator(value, validationResult, errors, opts);
-    },
-
-    exec: () => {
-      const result = opts.getErrors ? { isValid, errors } : isValid;
-
-      if (opts.async) {
-        return Promise.resolve(result);
-      }
-
-      return result;
-    },
+  array = () => {
+    this.rules.push({ ruleName: 'array' });
+    return this;
   };
+
+  arrayOf = (...params) => {
+    this.rules.push({ ruleName: 'arrayOf', ruleParams: params });
+    return this;
+  };
+
+  boolean = () => {
+    this.rules.push({ ruleName: 'boolean' });
+    return this;
+  };
+
+  number = () => {
+    this.rules.push({ ruleName: 'number' });
+    return this;
+  };
+
+  string = () => {
+    this.rules.push({ ruleName: 'string' });
+    return this;
+  };
+
+  customValidation = customValidation => {
+    this.rules.push({ ruleName: 'customValidation', ruleParams: customValidation });
+    return this;
+  };
+
+  email = (...params) => {
+    this.rules.push({ ruleName: 'email', ruleParams: params });
+    return this;
+  };
+
+  date = (...params) => {
+    this.rules.push({ ruleName: 'date', ruleParams: params });
+    return this;
+  };
+
+  regex = (...params) => {
+    this.rules.push({ ruleName: 'regex', ruleParams: params });
+    return this;
+  };
+
+  min = (...params) => {
+    this.rules.push({ ruleName: 'min', ruleParams: params });
+    return this;
+  };
+
+  max = (...params) => {
+    this.rules.push({ ruleName: 'max', ruleParams: params });
+    return this;
+  };
+
+  minLength = (...params) => {
+    this.rules.push({ ruleName: 'minLength', ruleParams: params });
+    return this;
+  };
+
+  maxLength = (...params) => {
+    this.rules.push({ ruleName: 'maxLength', ruleParams: params });
+    return this;
+  };
+
+  allowEmpty = () => {
+    this.rules.push({ ruleName: 'allowEmpty' });
+    return this;
+  };
+
+  notAllowEmpty = () => {
+    this.rules.push({ ruleName: 'notAllowEmpty' });
+    return this;
+  };
+
+  getRules = () => {
+    this.rules.forEach((rule, index) => {
+      const { ruleName } = rule;
+      if (ruleName === 'allowEmpty' || ruleName === 'notAllowEmpty') {
+        this.rules.splice(index, 1);
+        this.rules.push(rule);
+      }
+    });
+
+    return this.rules;
+  };
+
+  validate = (value, opts, objectValue) => {
+    return this.getRules()
+      .reduce((ruleValidationResult, { ruleName, ruleParams }) => {
+        const params =
+          ruleName === 'customValidation'
+            ? [ruleParams(objectValue || value, opts)]
+            : ruleParams;
+
+        return ruleValidationResult[ruleName].apply(null, params);
+      }, validate(value, opts))
+      .validate();
+  };
+}
+
+const vlt = function vlt() {
+  return new ValidationStructure();
 };
 
-const validate = (
-  value,
-  { getErrors = false, async = false, validatedPropertyName } = {},
-) => {
-  return Validator(value, true, [], { getErrors, async, validatedPropertyName });
-};
+vlt.scheme = scheme;
 
-export default validate;
+export default vlt;

@@ -52,11 +52,11 @@
   },
   "scripts": {
     "lint": "eslint -c eslintrc.json 'src/*'",
-    "lint:tests": "eslint -c eslintrc-test.json 'test/**/*.{js,jsx}'",
+    "lint:tests": "eslint -c eslintrc-test.json 'tests/**/*.{js,jsx}'",
     "prepublish": "yarn build",
-    "test": "jest test/*.spec.{jsx,js}",
+    "test": "jest tests/*.spec.{jsx,js}",
     "upload": "npm publish --access public",
-    "dev": "microbundle --entry src/index.jsx --output dist --jsx React.createElement --name @diegofrayo/form --globals prop-types=PropTypes, @diegofrayo/validator=dfr_validator --no-compress --watch",
+    "dev": "microbundle --entry src/index.jsx --output dist --jsx React.createElement --name @diegofrayo/form --globals prop-types=PropTypes,@diegofrayo/validator=dfr_validator --no-compress --watch",
     "build": "microbundle --entry src/index.jsx --output dist --jsx React.createElement --name @diegofrayo/form --globals prop-types=PropTypes,@diegofrayo/validator=dfr_validator"
   },
   "files": [

@@ -24,6 +24,7 @@ module.exports = {
     'no-console': 0,
     'no-continue': 0,
     'no-underscore-dangle': 0,
+    'valid-typeof': 0,
 
     // https://github.com/benmosher/eslint-plugin-import/tree/master/docs/rules
     'import/extensions': 0,

@@ -1,9 +1,9 @@
 import {
-  createObjectScheme,
-  formatErrorMessage,
-  Rule,
   TypesValidator,
+  validate,
   ValidationError,
+  Validator,
+  ValidatorRule,
 } from '@diegofrayo/validator';
 
 import { FORM_STATUS } from './constants';
@@ -36,34 +36,22 @@ export default class FormService {
       return { isValid: true };
     };
 
-    const inputConfigScheme = createObjectScheme({
-      type: new Rule().string().notAllowEmpty(),
-      errorMessage: new Rule().string().notAllowEmpty(),
-      handlers: new Rule().customValidation(customValidation),
-    });
-
-    const formConfigValidation = Object.entries(formConfig).reduce(
-      (result, [inputName, inputConfig]) => {
-        const inputConfigValidationResult = inputConfigScheme.validate(inputConfig, {
-          getErrors: true,
-          validatedPropertyName: inputName,
-        });
-
-        if (inputConfigValidationResult.isValid === false) {
-          // eslint-disable-next-line
-          result.isValid = false;
-
-          // eslint-disable-next-line
-          result.errors = result.errors.concat(inputConfigValidationResult.errors);
-        }
-
-        return result;
-      },
-      { isValid: true, errors: [] },
+    const formConfigValidation = validate(formConfig, {
+      getErrors: true,
+      validatedPropertyName: 'formConfig',
+      objectKeyExtractor: (object, index) => Object.keys(formConfig)[index],
+    }).arrayOf(
+      Validator.createObjectScheme({
+        type: new ValidatorRule().string().notAllowEmpty(),
+        errorMessage: new ValidatorRule().string().notAllowEmpty(),
+        handlers: new ValidatorRule().customValidation(customValidation),
+      }),
     );
 
-    if (formConfigValidation.isValid === false) {
-      throw new Error(formatErrorMessage('formConfig', formConfigValidation.errors));
+    if (!formConfigValidation.isValid) {
+      throw new Error(
+        Validator.formatErrorMessage('formConfig', formConfigValidation.errors),
+      );
     }
 
     return true;
@@ -143,7 +131,7 @@ export default class FormService {
 
     const {
       formConfig,
-      onSubmitCallback,
+      onSubmitHandler,
       submitResponseMessages,
       validateAtDidMount,
     } = this.props;
@@ -170,8 +158,7 @@ export default class FormService {
       if (formStatusResulting === FORM_STATUS.INVALID) {
         setFormErrors(formErrorsResulting);
         updateFormStatus(formStatusResulting);
-
-        return null;
+        return;
       }
     }
 
@@ -190,19 +177,23 @@ export default class FormService {
       {},
     );
 
-    setLoadingFormStatus();
+    const onSubmitHandlerResult = onSubmitHandler(transformedValues);
 
-    return onSubmitCallback(transformedValues)
-      .then(res => {
-        setSuccessSubmitResponse(
-          this._getSubmitResponseMessage(submitResponseMessages.success, res),
-        );
-      })
-      .catch(e => {
-        setFailureSubmitResponse(
-          this._getSubmitResponseMessage(submitResponseMessages.failure, e),
-        );
-      });
+    if (TypesValidator.isPromise(onSubmitHandlerResult)) {
+      setLoadingFormStatus();
+
+      onSubmitHandlerResult
+        .then(res => {
+          setSuccessSubmitResponse(
+            this._getSubmitResponseMessage(submitResponseMessages.success, res),
+          );
+        })
+        .catch(e => {
+          setFailureSubmitResponse(
+            this._getSubmitResponseMessage(submitResponseMessages.failure, e),
+          );
+        });
+    }
   };
 
   onInputChange = data => {
@@ -233,7 +224,7 @@ export default class FormService {
     });
 
     this._updateErrorMessage({
-      addErrorMessageIf: isValidInput === false,
+      addErrorMessageIf: !isValidInput,
       inputConfig,
       inputName,
       formInvalidInputs,

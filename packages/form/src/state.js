@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { FORM_STATUS, FORM_SUBMIT_RESPONSE_TYPES } from './constants';
-import { keyMirror } from './utils';
+import { keyMirror, mergeActions } from './utils';
 
 const INITIAL_STATE = {
   formErrors: {},
@@ -15,25 +15,25 @@ const INITIAL_STATE = {
   },
 };
 
-const ACTIONS = keyMirror({
-  RESET_SUBMIT_RESPONSE: 0,
-  SET_FORM_ERRORS: 0,
-  SET_FORM_INVALID_INPUTS: 0,
-  SET_LOADING_FORM_STATUS: 0,
-  SET_FAILURE_SUBMIT_RESPONSE: 0,
-  SET_SUCCESS_SUBMIT_RESPONSE: 0,
-  UPDATE_ERROR_MESSAGE: 0,
-  UPDATE_FORM_STATUS: 0,
-  UPDATE_FORM_VALUES: 0,
-  UPDATE_INPUT_VALUE: 0,
-});
+const ACTIONS = keyMirror([
+  'RESET_SUBMIT_RESPONSE',
+  'SET_FORM_ERRORS',
+  'SET_FORM_INVALID_INPUTS',
+  'SET_LOADING_FORM_STATUS',
+  'SET_FAILURE_SUBMIT_RESPONSE',
+  'SET_SUCCESS_SUBMIT_RESPONSE',
+  'UPDATE_ERROR_MESSAGE',
+  'UPDATE_FORM_STATUS',
+  'UPDATE_FORM_VALUES',
+  'UPDATE_INPUT_VALUE',
+]);
 
 const reducerActions = {
-  RESET_SUBMIT_RESPONSE: state => {
+  [ACTIONS.RESET_SUBMIT_RESPONSE]: state => {
     return { ...state, submitResponse: INITIAL_STATE.submitResponse };
   },
 
-  SET_FORM_ERRORS: (state, action) => {
+  [ACTIONS.SET_FORM_ERRORS]: (state, action) => {
     return {
       ...state,
       formErrors: action.payload.formErrors,
@@ -53,46 +53,39 @@ const reducerActions = {
     };
   },
 
-  SET_FORM_INVALID_INPUTS: (state, action) => {
-    return {
-      ...state,
-      formInvalidInputs: action.payload.formInvalidInputs,
-    };
-  },
-
-  SET_LOADING_FORM_STATUS: state => {
+  [ACTIONS.SET_LOADING_FORM_STATUS]: state => {
     return {
       ...state,
       formStatus: FORM_STATUS.LOADING,
-      submitResponse: INITIAL_STATE.submitResponse,
+      submitResponse: { ...INITIAL_STATE.submitResponse },
     };
   },
 
-  SET_SUCCESS_SUBMIT_RESPONSE: (state, action) => {
+  [ACTIONS.SET_SUCCESS_SUBMIT_RESPONSE]: (state, action) => {
     return {
       ...state,
       formStatus: FORM_STATUS.VALID,
       submitResponse: {
         show: true,
         type: FORM_SUBMIT_RESPONSE_TYPES.SUCCESS,
-        message: action.payload.message,
+        message: action.payload,
       },
     };
   },
 
-  SET_FAILURE_SUBMIT_RESPONSE: (state, action) => {
+  [ACTIONS.SET_FAILURE_SUBMIT_RESPONSE]: (state, action) => {
     return {
       ...state,
       formStatus: FORM_STATUS.VALID,
       submitResponse: {
         show: true,
         type: FORM_SUBMIT_RESPONSE_TYPES.FAILURE,
-        message: action.payload.message,
+        message: action.payload,
       },
     };
   },
 
-  UPDATE_ERROR_MESSAGE: (state, action) => {
+  [ACTIONS.UPDATE_ERROR_MESSAGE]: (state, action) => {
     const stateUpdates = ((formErrors, formInvalidInputs) => {
       const formErrorsUpdated = { ...formErrors };
       const formInvalidInputsUpdated = { ...formInvalidInputs };
@@ -117,15 +110,7 @@ const reducerActions = {
     };
   },
 
-  UPDATE_FORM_STATUS: (state, action) => {
-    return { ...state, formStatus: action.payload.formStatus };
-  },
-
-  UPDATE_FORM_VALUES: (state, action) => {
-    return { ...state, formValues: action.payload.formValues };
-  },
-
-  UPDATE_INPUT_VALUE: (state, action) => {
+  [ACTIONS.UPDATE_INPUT_VALUE]: (state, action) => {
     return {
       ...state,
       formValues: {
@@ -134,6 +119,17 @@ const reducerActions = {
       },
     };
   },
+
+  ...mergeActions({
+    actionTypes: [
+      ACTIONS.UPDATE_FORM_VALUES,
+      ACTIONS.UPDATE_FORM_STATUS,
+      ACTIONS.SET_FORM_INVALID_INPUTS,
+    ],
+    reducer: (state, action) => {
+      return { ...state, ...action.payload };
+    },
+  }),
 
   default: (state, action) => {
     throw new Error(`Invalid action: ${action.type}`);
@@ -171,11 +167,11 @@ const useForm = () => {
   };
 
   const setFailureSubmitResponse = message => {
-    dispatch({ type: ACTIONS.SET_FAILURE_SUBMIT_RESPONSE, payload: { message } });
+    dispatch({ type: ACTIONS.SET_FAILURE_SUBMIT_RESPONSE, payload: message });
   };
 
   const setSuccessSubmitResponse = message => {
-    dispatch({ type: ACTIONS.SET_SUCCESS_SUBMIT_RESPONSE, payload: { message } });
+    dispatch({ type: ACTIONS.SET_SUCCESS_SUBMIT_RESPONSE, payload: message });
   };
 
   const updateErrorMessage = (inputName, errorMessage) => {
@@ -198,7 +194,7 @@ const useForm = () => {
   };
 
   return {
-    state,
+    ...state,
 
     resetSubmitResponse,
     setFormErrors,

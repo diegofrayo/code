@@ -4,18 +4,23 @@ import PropTypes from 'prop-types';
 import { FORM_STATUS, FORM_SUBMIT_RESPONSE_TYPES } from './constants';
 import FormService from './service';
 import useForm from './state';
-import { didMount } from './utils';
+import { componentDidMount } from './utils';
 
 const Form = function Form({
   children,
   config: formConfig,
   defaultValues,
-  onSubmit: onSubmitCallback,
+  onInputChangeParentHandler,
+  onSubmit: onSubmitHandler,
   submitResponseMessages,
   validateAtDidMount,
 }) {
   const {
-    state: { formErrors, formInvalidInputs, formStatus, formValues, submitResponse },
+    formErrors,
+    formInvalidInputs,
+    formStatus,
+    formValues,
+    submitResponse,
 
     resetSubmitResponse,
     setFormErrors,
@@ -32,7 +37,8 @@ const Form = function Form({
   const formService = new FormService({
     props: {
       formConfig,
-      onSubmitCallback,
+      onInputChangeParentHandler,
+      onSubmitHandler,
       submitResponseMessages,
       validateAtDidMount,
     },
@@ -57,7 +63,7 @@ const Form = function Form({
     },
   });
 
-  didMount(() => {
+  componentDidMount(() => {
     formService.validateFormConfig(formConfig);
 
     const formDefaultValues = formService.createFormDefaultValues(
@@ -89,6 +95,12 @@ const Form = function Form({
     }
   });
 
+  React.useEffect(() => {
+    if (onInputChangeParentHandler) {
+      onInputChangeParentHandler({ formErrors, formStatus, formValues });
+    }
+  }, [formValues]);
+
   if (!formValues) return null;
 
   return (
@@ -119,6 +131,7 @@ Form.propTypes = {
   onSubmit: PropTypes.func.isRequired,
 
   defaultValues: PropTypes.object,
+  onInputChangeParentHandler: PropTypes.func,
   submitResponseMessages: PropTypes.shape({
     success: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
     failure: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
@@ -128,6 +141,7 @@ Form.propTypes = {
 
 Form.defaultProps = {
   defaultValues: {},
+  onInputChangeParentHandler: undefined,
   submitResponseMessages: {},
   validateAtDidMount: false,
 };

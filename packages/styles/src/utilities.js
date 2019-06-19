@@ -1,13 +1,13 @@
 import React from 'react';
 
-export const keyMirror = object => {
-  return Object.keys(object).reduce((acum, curr) => {
+export const keyMirror = (object = {}) => {
+  return (Array.isArray(object) ? object : Object.keys(object)).reduce((acum, curr) => {
     acum[curr] = curr; // eslint-disable-line
     return acum;
   }, {});
 };
 
-export const arrayWithAliases = (object, otherProps) => {
+export const arrayWithAliases = (object = {}, otherProps = {}) => {
   if (Array.isArray(object)) {
     return Object.keys(otherProps).reduce((acum, curr) => {
       acum[curr] = otherProps[curr]; // eslint-disable-line

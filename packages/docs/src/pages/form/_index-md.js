@@ -27,6 +27,10 @@ export default {
     * **Type:** \`Object\`
     * **Description:** Form's inputs values
 
+- \`validateAtDidMount\`
+    * **Type:** \`Boolean\`
+    * **Description:** validateAtDidMount prop value (See [#PROPS](#props))
+
 - \`updaters\`
     * **Type:** \`Object\`
     * **Description:** Object with three functions to update form's state
@@ -54,6 +58,12 @@ export default {
     * **Description:** Required to create a \`defaultValue\` of the input
     * **Posible values**: \`string\` | \`number\` | \`bool\`
 
+- \`errorMessage\`
+    * **Type:** \`String\`
+    * **Required:** \`yes\`
+    * **Description:** This message will be saved in \`errors\` object (See [#children](#children)) when the input value is invalid
+    * **Default value:** \`'Wrong input value'\`
+
 - \`required\`
     * **Type:** \`Boolean\`
     * **Required:** \`no\`
@@ -63,12 +73,6 @@ export default {
     * **Type:** \`Any\`
     * **Required:** \`no\`
     * **Default value:** This value will depend on \`type\` value that you set
-
-- \`errorMessage\`
-    * **Type:** \`String\`
-    * **Required:** \`yes\`
-    * **Description:** This message will be saved in \`errors\` object (See [#children](#children)) when the input value is invalid
-    * **Default value:** \`'Wrong input value'\`
 
 - \`customValidation\`
     * **Type:** \`bool\`

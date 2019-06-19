@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import showdown from 'showdown';
 
@@ -10,7 +10,9 @@ const mdParser = new showdown.Converter({
 });
 
 const environment =
-  window.location.href.indexOf('localhost') !== -1 ? 'localhost' : 'diegofrayo';
+  window.location.href.indexOf(':3000') !== -1
+    ? ':3000'
+    : 'https://diegofrayo-docs.netlify.com';
 
 const isLocalLink = link => {
   return link.href.indexOf(environment) !== -1;
@@ -31,7 +33,7 @@ const configureLinks = () => {
 const Markdown = ({ md }) => {
   const html = mdParser.makeHtml(md, 'utf8');
 
-  useEffect(() => {
+  React.useEffect(() => {
     setTimeout(configureLinks, 1000);
   });
 

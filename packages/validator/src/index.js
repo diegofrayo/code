@@ -1,14 +1,11 @@
-import createObjectScheme from './create-object-scheme';
-import Rule from './rule';
 import TypesValidator from './types-validator';
-import { ValidationError, formatErrorMessage } from './validation-error';
-import validate from './validator';
+import ValidationError from './validation-error';
+import vlt from './validator';
+import { formatErrorMessage } from './utils';
 
 export default {
-  createObjectScheme,
   formatErrorMessage,
-  Rule,
   TypesValidator,
-  validate,
   ValidationError,
+  vlt,
 };
