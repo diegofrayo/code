@@ -1,10 +1,4 @@
-import {
-  TypesValidator,
-  validate,
-  ValidationError,
-  Validator,
-  ValidatorRule,
-} from '@diegofrayo/validator';
+import { vlt, TypesValidator, ValidationError } from '@diegofrayo/validator';
 
 import { FORM_STATUS } from './constants';
 
@@ -36,22 +30,26 @@ export default class FormService {
       return { isValid: true };
     };
 
-    const formConfigValidation = validate(formConfig, {
-      getErrors: true,
-      validatedPropertyName: 'formConfig',
-      objectKeyExtractor: (object, index) => Object.keys(formConfig)[index],
-    }).arrayOf(
-      Validator.createObjectScheme({
-        type: new ValidatorRule().string().notAllowEmpty(),
-        errorMessage: new ValidatorRule().string().notAllowEmpty(),
-        handlers: new ValidatorRule().customValidation(customValidation),
-      }),
-    );
+    const formConfigValidation = vlt()
+      .arrayOf(
+        vlt.scheme({
+          type: vlt()
+            .string()
+            .notAllowEmpty(),
+          errorMessage: vlt()
+            .string()
+            .notAllowEmpty(),
+          handlers: vlt().customValidation(customValidation),
+        }),
+      )
+      .validate(Object.values(formConfig), {
+        getErrors: true,
+        validatedPropertyName: 'formConfig',
+        objectKeyExtractor: (object, index) => Object.keys(formConfig)[index],
+      });
 
     if (!formConfigValidation.isValid) {
-      throw new Error(
-        Validator.formatErrorMessage('formConfig', formConfigValidation.errors),
-      );
+      throw new Error(vlt.formatErrorMessage('formConfig', formConfigValidation.errors));
     }
 
     return true;

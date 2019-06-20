@@ -9,12 +9,12 @@ const TYPE = {
 };
 
 const Space = styled('div')(
-  ({ props, utilities }) => `
-    ${utilities.ifProp(props.type === TYPE.HORIZONTAL, 'display', 'inline-block')}
-    ${utilities.if(
+  ({ props, utils }) => `
+    ${utils.ifProp(props.type === TYPE.HORIZONTAL, 'display', 'inline-block')}
+    ${utils.if(
       props.type === TYPE.VERTICAL,
-      utilities.marginY(props.size),
-      utilities.marginX(props.size),
+      utils.marginY(props.size),
+      utils.marginX(props.size),
     )}
   `,
 );

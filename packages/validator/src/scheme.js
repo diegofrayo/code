@@ -1,5 +1,4 @@
 import TypesValidator from './types-validator';
-import validate from './validate';
 import ValidationError from './validation-error';
 
 const createOpts = (opts, schemeItemName) => {
@@ -11,7 +10,7 @@ const createOpts = (opts, schemeItemName) => {
   };
 };
 
-const scheme = function scheme(scheme) {
+const scheme = function scheme(objectScheme) {
   return {
     __name: 'VLDTR_scheme',
     validate: (objectToValidate, opts = {}) => {
@@ -32,22 +31,15 @@ const scheme = function scheme(scheme) {
             }
           : false;
       } else {
-        validationResult = Object.entries(scheme).reduce(
+        validationResult = Object.entries(objectScheme).reduce(
           (result, [schemeItemName, schemeItemRule]) => {
-            let schemeItemValidationResult;
-
-            if (TypesValidator.isVLTObjectScheme(schemeItemRule)) {
-              schemeItemValidationResult = schemeItemRule.validate(
-                objectToValidate[schemeItemName],
-                createOpts(opts, schemeItemName),
-              );
-            } else {
-              schemeItemValidationResult = schemeItemRule.validate(
-                objectToValidate[schemeItemName],
-                createOpts(opts, schemeItemName),
-                objectToValidate,
-              );
-            }
+            const schemeItemValidationResult = schemeItemRule.validate(
+              objectToValidate[schemeItemName],
+              createOpts(opts, schemeItemName),
+              !TypesValidator.isVLTObjectScheme(schemeItemRule)
+                ? objectToValidate
+                : undefined,
+            );
 
             if (opts.getErrors) {
               if (!schemeItemValidationResult.isValid) {

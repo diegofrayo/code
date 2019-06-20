@@ -1,4 +1,4 @@
-import { validate } from '@diegofrayo/validator';
+import { vlt } from '@diegofrayo/validator';
 
 export default {
   email: {
@@ -13,9 +13,9 @@ export default {
     },
     handlers: {
       isValid: value => {
-        return validate(value)
+        return vlt()
           .email()
-          .exec();
+          .validate(value);
       },
     },
   },
@@ -33,9 +33,9 @@ export default {
     },
     handlers: {
       isValid: value => {
-        return validate(value)
+        return vlt()
           .minLength(5)
-          .exec();
+          .validate(value);
       },
     },
   },
@@ -50,11 +50,11 @@ export default {
     },
     handlers: {
       isValid: value => {
-        return validate(value)
+        return vlt()
           .string()
           .minLength(2)
           .allowEmpty()
-          .exec();
+          .validate(value);
       },
     },
   },
@@ -70,9 +70,9 @@ export default {
     },
     handlers: {
       isValid: value => {
-        return validate(value)
+        return vlt()
           .date()
-          .exec();
+          .validate(value);
       },
       transformBeforeSubmit: value => {
         const date = value.split('-');
@@ -94,11 +94,11 @@ export default {
     },
     handlers: {
       isValid: value => {
-        return validate(value)
+        return vlt()
           .number()
           .min(18)
           .max(80)
-          .exec();
+          .validate(value);
       },
       transformBeforeSave: value => {
         return Number(value);

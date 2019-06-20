@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Form from '@diegofrayo/form';
-import { validate } from '@diegofrayo/validator';
+import { vlt } from '@diegofrayo/validator';
 import { Box, Loader } from '@diegofrayo/components';
 import { Input } from '@diegofrayo/components/styled';
 import { styled } from '@diegofrayo/styles';
 
-const Container = styled(Box)(({ props, utilities }) =>
-  utilities.if(props.isLoading, {
+const Container = styled(Box)(({ props, utils }) =>
+  utils.if(props.isLoading, {
     true: `
       background-color: #d0d0d0;
       cursor: not-allowed;
@@ -46,10 +46,10 @@ class InputEmail extends React.Component {
   blurCounter = 1;
 
   validate = inputValue => {
-    return validate(inputValue)
+    return vlt()
       .email()
       .allowEmpty()
-      .exec();
+      .validate(inputValue);
   };
 
   onBlur = event => {

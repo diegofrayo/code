@@ -20,15 +20,15 @@ export const Container = styled(Box)(
   `,
 );
 
-export const FormGroup = styled(Box)(({ props, utilities }) => {
-  const color = utilities.ifProp(props.error, 'color', 'red');
+export const FormGroup = styled(Box)(({ props, utils }) => {
+  const color = utils.ifProp(props.error, 'color', 'red');
 
   return `
     ${color}
 
     .dfr-input, .dfr-input:focus {
       ${color}
-      outline-color: ${utilities.if(props.error, 'indianred', 'lightgray')};
+      outline-color: ${props.error ? 'indianred' : 'lightgray'};
     }
   `;
 });
@@ -57,7 +57,7 @@ Input.Error = ({ children }) => {
 };
 
 export const Button = styled(BaseButton)(
-  ({ theme, utilities, props }) => `
+  ({ theme, utils, props }) => `
     background-color: #006fa7;
     border: none;
     color: white;
@@ -68,7 +68,7 @@ export const Button = styled(BaseButton)(
     text-transform: uppercase;
     width: 100%;
 
-    ${utilities.if(props.disabled, {
+    ${utils.if(props.disabled, {
       true: `
         cursor: not-allowed;
         opacity: 0.7;

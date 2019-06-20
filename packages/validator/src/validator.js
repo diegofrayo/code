@@ -1,5 +1,6 @@
 import scheme from './scheme';
 import validate from './validate';
+import { formatErrorMessage } from './utils';
 
 class ValidationStructure {
   constructor() {
@@ -112,5 +113,6 @@ const vlt = function vlt() {
 };
 
 vlt.scheme = scheme;
+vlt.formatErrorMessage = formatErrorMessage;
 
 export default vlt;

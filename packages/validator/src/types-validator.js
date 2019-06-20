@@ -31,7 +31,7 @@ const TypesValidator = {
       const validationResult = value.reduce(
         (result, item, index) => {
           if (this.isVLTObjectScheme(itemsType)) {
-            const validationResult = itemsType.validate(item, {
+            const objectSchemeValidationResult = itemsType.validate(item, {
               ...opts,
               getErrors: true,
               validatedPropertyName: `${opts.validatedPropertyName || ''} => ${
@@ -39,12 +39,12 @@ const TypesValidator = {
               }`,
             });
 
-            if (!validationResult.isValid) {
+            if (!objectSchemeValidationResult.isValid) {
               // eslint-disable-next-line no-param-reassign
               result.isValid = false;
 
               // eslint-disable-next-line no-param-reassign
-              result.errors = result.errors.concat(validationResult.errors);
+              result.errors = result.errors.concat(objectSchemeValidationResult.errors);
             }
           } else if (typeof item !== itemsType) {
             // eslint-disable-next-line no-param-reassign

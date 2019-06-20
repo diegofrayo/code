@@ -1,29 +1,35 @@
 import React from 'react';
+import { getTheme } from './theme';
 
 export const keyMirror = (object = {}) => {
-  return (Array.isArray(object) ? object : Object.keys(object)).reduce((acum, curr) => {
-    acum[curr] = curr; // eslint-disable-line
-    return acum;
+  return (Array.isArray(object) ? object : Object.keys(object)).reduce((result, curr) => {
+    // eslint-disable-next-line no-param-reassign
+    result[curr] = curr;
+
+    return result;
   }, {});
 };
 
 export const arrayWithAliases = (object = {}, otherProps = {}) => {
   if (Array.isArray(object)) {
-    return Object.keys(otherProps).reduce((acum, curr) => {
-      acum[curr] = otherProps[curr]; // eslint-disable-line
-      return acum;
+    return Object.keys(otherProps).reduce((result, curr) => {
+      Object.defineProperty(result, curr, { value: otherProps[curr] });
+      return result;
     }, object);
   }
 
   return Object.keys(object).reduce(
-    (acum, curr, index) => {
-      acum[index] = object[curr]; // eslint-disable-line
-      acum[curr] = acum[index]; // eslint-disable-line
-      return acum;
+    (result, curr, index) => {
+      // eslint-disable-next-line no-param-reassign
+      result[index] = object[curr];
+
+      Object.defineProperty(result, curr, { value: result[index] });
+
+      return result;
     },
-    Object.keys(otherProps).reduce((acum, curr) => {
-      acum[curr] = otherProps[curr]; // eslint-disable-line
-      return acum;
+    Object.keys(otherProps).reduce((result, curr) => {
+      Object.defineProperty(result, curr, { value: otherProps[curr] });
+      return result;
     }, []),
   );
 };
@@ -66,4 +72,37 @@ export const getUnits = (value, themeValues) => {
   }
 
   return finalValue;
+};
+
+export const utils = {
+  if: (condition, result, resultFalse) => {
+    if (typeof result === 'object') {
+      return condition ? result.true : result.false;
+    }
+
+    return condition ? result : resultFalse;
+  },
+
+  ifProp: (condition, property, value) => {
+    if (condition) {
+      return `${property}: ${value};`;
+    }
+
+    return '';
+  },
+
+  switch: (prop, values) => {
+    const value = values[prop];
+
+    if (value === undefined && values.default !== undefined) {
+      return values.default;
+    }
+
+    return value;
+  },
+
+  marginX: value => spacingX('margin', getUnits(value, getTheme().spacing)),
+  marginY: value => spacingY('margin', getUnits(value, getTheme().spacing)),
+  paddingX: value => spacingX('padding', getUnits(value, getTheme().spacing)),
+  paddingY: value => spacingY('padding', getUnits(value, getTheme().spacing)),
 };

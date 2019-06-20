@@ -97,7 +97,7 @@ This object contains the form's inputs config. Each key is the unique identifier
 Let's see an example of this prop
 
 ```
-import validator from '@diegofrayo/validator';
+import { vlt } from '@diegofrayo/validator';
 
 const config = {
   name: {
@@ -106,10 +106,10 @@ const config = {
     errorMessage: 'Please enter a valid name.',
     handlers: {
       isValid: value => {
-        return validator(value)
+        return vlt()
           .string()
           .notAllowEmpty()
-          .exec();
+          .validate(value);
       },
       transformBeforeSubmit: (value, values) => {
         return `${value} ${values['lastName']}`;
@@ -122,10 +122,10 @@ const config = {
     errorMessage: 'Please enter a valid last name.',
     handlers: {
       isValid: value => {
-        return validator(value)
+        return vlt()
           .string()
           .notAllowEmpty()
-          .exec();
+          .validate(value);
       },
       transformBeforeSubmit: (value, values) => {
         return '';
@@ -139,11 +139,11 @@ const config = {
     errorMessage: 'Please enter a valid number.',
     handlers: {
       isValid: value => {
-        return validator(value)
+        return vlt()
           .number()
           .min(5)
           .max(10)
-          .exec();
+          .validate(value);
       },
       transformBeforeSave: value => {
         return Number(value);

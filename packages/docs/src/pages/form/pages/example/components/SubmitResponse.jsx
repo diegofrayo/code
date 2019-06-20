@@ -6,12 +6,12 @@ import { styled } from '@diegofrayo/styles';
 import Form from '@diegofrayo/form';
 
 const Container = styled(Box)(
-  ({ theme, utilities, props }) => `
-    display: ${utilities.if(props.show, 'block', 'none')};
+  ({ theme, utils, props }) => `
+    display: ${props.show ? 'block' : 'none'};
     padding: ${theme.spacing.M} ${theme.spacing.L};
     position: relative;
 
-    ${utilities.switch(props.type, {
+    ${utils.switch(props.type, {
       [Form.SUBMIT_RESPONSE_TYPES.SUCCESS]: `
         background-color: #437b43;
         color: white;
