@@ -3,6 +3,6 @@
   "main": "../dist/styled/components.js",
   "module": "../dist/styled/components.umd.js",
   "dependencies": {
-    "@diegofrayo/styles": "1.0.0"
+    "@diegofrayo/styles": "^1.0.0"
   }
 }

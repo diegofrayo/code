@@ -1,14 +1,7 @@
-import React from 'react';
-
-import {
-  Box,
-  Button as BaseButton,
-  Label as BaseLabel,
-  Text,
-} from '@diegofrayo/components';
-import { Input as BaseInput } from '@diegofrayo/components/styled';
+import { Box, Button as BaseButton, Label as BaseLabel } from '@diegofrayo/components';
 import { styled } from '@diegofrayo/styles';
 
+import Input from './Input';
 import InputEmail from './InputEmail';
 import SubmitResponse from './SubmitResponse';
 
@@ -41,21 +34,6 @@ export const Label = styled(BaseLabel)(
   `,
 );
 
-export const Input = styled(BaseInput)();
-
-// eslint-disable-next-line
-Input.Error = ({ children }) => {
-  if (children) {
-    return (
-      <Text fontSize={3} marginTop="0">
-        {children}
-      </Text>
-    );
-  }
-
-  return null;
-};
-
 export const Button = styled(BaseButton)(
   ({ theme, utils, props }) => `
     background-color: #006fa7;
@@ -78,4 +56,4 @@ export const Button = styled(BaseButton)(
   `,
 );
 
-export { InputEmail, SubmitResponse };
+export { Input, InputEmail, SubmitResponse };

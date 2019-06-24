@@ -37,7 +37,7 @@ import onSubmit from './onSubmit.js';
 
 <Playground>
   <Form
-    defaultValues={{ email: 'invalid-email', birthDate: '2019-04-19' }}
+    initialValues={{ email: 'invalid-email', birthDate: '2019-04-19' }}
     config={formConfig}
     onSubmit={onSubmit}
     submitResponseMessages={{
@@ -47,18 +47,19 @@ import onSubmit from './onSubmit.js';
   >
     {({
       errors,
+      formInputsState,
       onInputChange,
       onSubmit,
       resetSubmitResponse,
       status,
       submitResponse,
       updaters,
+      validateAtDidMount,
       values,
-      validateAtDidMount
     }) => {
       return (
         <Container>
-          <FormGroup error={!!errors.email}>
+          <FormGroup error={!formInputsState.email}>
             <Label htmlFor={formConfig.email.htmlAttrs.id}>
               Email {formConfig.email.required ? '*' : ''}
             </Label>
@@ -69,7 +70,6 @@ import onSubmit from './onSubmit.js';
               htmlAttrs={formConfig.email.htmlAttrs}
               inputConfig={formConfig.email}
             />
-            <Input.Error>{errors.email}</Input.Error>
           </FormGroup>
 
           <Space />

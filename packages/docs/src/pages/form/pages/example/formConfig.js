@@ -1,11 +1,10 @@
-import { vlt } from '@diegofrayo/validator';
+import { vlt } from '@diegofrayo/vlt';
 
 export default {
   email: {
     type: 'string',
     required: true,
     customValidation: true,
-    errorMessage: 'Please type a valid email',
     htmlAttrs: {
       id: 'input-email',
       placeholder: 'email@domain.co',

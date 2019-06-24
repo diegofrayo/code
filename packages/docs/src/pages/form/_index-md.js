@@ -35,19 +35,13 @@ export default {
     * **Type:** \`Object\`
     * **Description:** Object with three functions to update form's state
 
-        - \`updateErrorMessage(inputName, errorMessage)\`
+        - \`setInputState(inputName, inputState)\`
             - **Type:** \`Function\`
-            - **Description:** Updates or remove an input's error message
+            - **Description:** Updates an input's state. If the input value is valid, inputState should be true, else, false
 
-        - \`updateInputValue(inputName, inputValue)\`
+        - \`setInputValue(inputName, inputValue)\`
             - **Type:** \`Function\`
             - **Description:** Updates an input's value
-
-        - \`updateStatus(formStatus)\`
-            - **Type:** \`Function\`
-            - **Params:**
-                - **formStatus:** See [FORM STATUS](#form-status)
-            - **Description:** Updates form's state
 
 `,
 
@@ -60,7 +54,7 @@ export default {
 
 - \`errorMessage\`
     * **Type:** \`String\`
-    * **Required:** \`yes\`
+    * **Required:** \`no\`
     * **Description:** This message will be saved in \`errors\` object (See [#children](#children)) when the input value is invalid
     * **Default value:** \`'Wrong input value'\`
 
@@ -85,11 +79,12 @@ export default {
     * **Required:** If \`customValidation\` is not true, \`isValid\` callback is required, so this attribute will be required, else, no
     * **Description:** Contains some callbacks to validate and transform the input value
 
-        - \`isValid(value, values)\`
+        - \`isValid(value, values, formConfig)\`
             - **Type:** \`Function\`
             - **Params:**
                 - **value:** Input's value
                 - **values:** Form's inputs values
+                - **formConfig:** Form's config
             - **Description:** Validates the input value
             - **Return:** \`Boolean\`
 

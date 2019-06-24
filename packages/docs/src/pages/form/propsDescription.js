@@ -8,7 +8,7 @@ export default {
     <strong>IMPORTANT:</strong> This function must return a <code>Promise</code>
   `,
 
-  defaultValues: `Form's inputs default values`,
+  initialValues: `Form's inputs initial values`,
 
   onInputChangeParentHandler:
     'This callback is executed when an input changes. It receives as parameters <code>Form</code> state object',

@@ -24,11 +24,11 @@
     "type": "git"
   },
   "dependencies": {
-    "@diegofrayo/components": "1.0.0",
-    "@diegofrayo/form": "1.0.0",
-    "@diegofrayo/styles": "1.0.0",
-    "@diegofrayo/utilities": "1.0.0",
-    "@diegofrayo/validator": "1.0.0",
+    "@diegofrayo/components": "^1.0.0",
+    "@diegofrayo/form": "^1.0.0",
+    "@diegofrayo/styles": "^1.0.0",
+    "@diegofrayo/utilities": "^1.0.0",
+    "@diegofrayo/vlt": "^1.0.0",
     "docz": "^0.13.7",
     "docz-theme-default": "^0.13.7",
     "parse-prop-types": "^0.3.0",
@@ -37,7 +37,7 @@
     "showdown": "^1.9.0"
   },
   "devDependencies": {
-    "@diegofrayo/eslint-config": "1.0.0",
+    "@diegofrayo/eslint-config": "^1.0.0",
     "eslint": "latest"
   },
   "engines": {
