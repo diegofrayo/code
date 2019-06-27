@@ -56,7 +56,7 @@ export default {
     * **Type:** \`String\`
     * **Required:** \`no\`
     * **Description:** This message will be saved in \`errors\` object (See [#children](#children)) when the input value is invalid
-    * **Default value:** \`'Wrong input value'\`
+    * **Default value:** \`''\`
 
 - \`required\`
     * **Type:** \`Boolean\`
@@ -86,7 +86,10 @@ export default {
                 - **values:** Form's inputs values
                 - **formConfig:** Form's config
             - **Description:** Validates the input value
-            - **Return:** \`Boolean\`
+            - **Return:**
+                - \`Boolean\`
+                - \`Object\` with errorMessages
+                - \`String\` to set error message for the current input
 
         - \`transformBeforeSave(value, values)\`
             - **Type:** \`Function\`

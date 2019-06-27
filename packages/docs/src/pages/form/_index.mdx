@@ -139,11 +139,19 @@ const config = {
     errorMessage: 'Please enter a valid number.',
     handlers: {
       isValid: value => {
-        return vlt()
+        if (vlt()
           .number()
           .min(5)
           .max(10)
-          .validate(value);
+          .validate(value)) {
+          return true;
+        }
+
+        if (typeof value === 'string') {
+          return 'String is not a number';
+        }
+
+        return { age: 'Enter a valid age...', lastName: '' };
       },
       transformBeforeSave: value => {
         return Number(value);

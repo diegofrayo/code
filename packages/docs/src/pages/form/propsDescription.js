@@ -8,10 +8,11 @@ export default {
     <strong>IMPORTANT:</strong> This function must return a <code>Promise</code>
   `,
 
-  initialValues: `Form's inputs initial values`,
+  enableLogging: `Flag to enable logging using <code>redux-logger</code>`,
 
-  onInputChangeParentHandler:
-    'This callback is executed when an input changes. It receives as parameters <code>Form</code> state object',
+  initialStatus: `Form's initial status. See <a href="#form-status">#form-status</a>`,
+
+  initialValues: `Form's inputs initial values`,
 
   validateAtDidMount:
     'Flag to set if the form must be validated when the component is being mounted or no',
