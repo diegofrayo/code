@@ -4,7 +4,6 @@
   "description": "This is a documentation for some own JavaScript packages",
   "license": "MIT",
   "private": true,
-  "homepage": "https://diegofrayo-docs.netlify.com",
   "scripts": {
     "lint": "eslint -c eslintrc.json 'src/**/*.{js,jsx}'",
     "start": "docz dev",
