@@ -12,7 +12,7 @@ const mdParser = new showdown.Converter({
 const environment =
   window.location.href.indexOf(':3000') !== -1
     ? ':3000'
-    : 'https://diegofrayo-docs.netlify.com';
+    : 'https://diegofrayo-docs.netlify.app';
 
 const isLocalLink = link => {
   return link.href.indexOf(environment) !== -1;
